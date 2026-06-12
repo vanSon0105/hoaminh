@@ -37,15 +37,69 @@ const setupPassword = () => {
   });
 };
 
+const API_BASE =
+  (window.location.protocol === "file:" ||
+    (["localhost", "127.0.0.1"].includes(window.location.hostname) && window.location.port !== "4000"))
+    ? "http://localhost:4000/api"
+    : "/api";
+
+let toastTimer;
+
+const showToast = (toast, message) => {
+  window.clearTimeout(toastTimer);
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+  toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 1800);
+};
+
 const setupSubmit = () => {
   const form = document.querySelector("[data-auth-form]");
   const toast = document.querySelector("[data-toast]");
   if (!form || !toast) return;
-  form.addEventListener("submit", (event) => {
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    toast.textContent = "Chức năng đăng nhập sẽ nối backend sau";
-    toast.classList.add("is-visible");
-    window.setTimeout(() => toast.classList.remove("is-visible"), 1800);
+
+    const email = form.querySelector('[name="email"]').value.trim();
+    const password = form.querySelector('[name="password"]').value;
+
+    if (!email || !password) {
+      showToast(toast, "Vui lòng nhập đầy đủ thông tin");
+      return;
+    }
+
+    const submitBtn = form.querySelector(".auth-submit");
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = "Đang đăng nhập...";
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const result = await res.json();
+
+      if (!result.success) {
+        showToast(toast, result.message);
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        return;
+      }
+
+      localStorage.setItem("hoaminh-token", result.data.token);
+      localStorage.setItem("hoaminh-account-profile", JSON.stringify(result.data.user));
+      showToast(toast, "Đăng nhập thành công!");
+      window.setTimeout(() => {
+        window.location.href = "../index.html";
+      }, 500);
+    } catch {
+      showToast(toast, "Lỗi kết nối đến máy chủ");
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
   });
 };
 

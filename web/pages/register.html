@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../assets/css/reset.css" />
     <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/register.css" />
+    <script src="../assets/js/session.js" defer></script>
     <script src="../assets/js/register.js" defer></script>
   </head>
   <body>
@@ -14,7 +15,7 @@
       <header class="site-header">
         <div class="header-top">
           <a class="brand-link" href="../index.html"><img class="brand-logo" src="../assets/images/logo.png" alt="Họa Minh" /></a>
-          <div class="header-actions"><a class="icon-link" href="login.html"><i class="fa-regular fa-circle-user" aria-hidden="true"></i></a><a class="icon-link" href="cart.html"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></a><form class="search-form" action="product.html"><input type="search" name="q" placeholder="Tìm kiếm..." /><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button></form></div>
+          <div class="header-actions"><a class="icon-link" href="account.html" aria-label="Tài khoản"><i class="fa-regular fa-circle-user" aria-hidden="true"></i></a><a class="icon-link" href="cart.html"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></a><form class="search-form" action="product.html"><input type="search" name="q" placeholder="Tìm kiếm..." /><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button></form></div>
         </div>
         <nav class="site-nav" data-site-nav><div class="nav-inner"><button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Mở menu"><span class="hamburger"></span></button><div class="nav-links"><div class="nav-links-inner"><a class="nav-link" href="../index.html">Trang chủ</a><a class="nav-link" href="product.html">Sản phẩm</a><a class="nav-link" href="information.html">Thông tin</a><a class="nav-link" href="cart.html">Giỏ hàng</a><a class="nav-link" href="checkout.html">Thanh toán</a></div></div></div></nav>
       </header>
@@ -24,10 +25,10 @@
           <div class="container">
             <h1 class="section-title reveal">Đăng ký</h1>
             <form class="register-card reveal" data-register-form>
-              <input type="text" placeholder="Tên đăng nhập" />
-              <input type="email" placeholder="Gmail" />
-              <input type="tel" placeholder="Số điện thoại" />
-              <label class="password-field"><input type="password" placeholder="Mật khẩu" data-password /><button type="button" data-toggle-password aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></label>
+              <input type="text" name="name" placeholder="Tên đăng nhập" />
+              <input type="email" name="email" placeholder="Gmail" />
+              <input type="tel" name="phone" placeholder="Số điện thoại" />
+              <label class="password-field"><input type="password" name="password" placeholder="Mật khẩu" data-password /><button type="button" data-toggle-password aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></label>
               <label class="password-field"><input type="password" placeholder="Nhập lại mật khẩu" data-password /><button type="button" data-toggle-password aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></label>
               <div class="auth-separator">Hoặc</div>
               <div class="social-auth"><button type="button">Facebook</button><button type="button">Google</button></div>
