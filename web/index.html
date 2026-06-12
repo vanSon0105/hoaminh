@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Họa Minh - Tranh cắt giấy 3D</title>
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/index.css" />
+    <script src="assets/js/index.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-top">
+          <a class="brand-link" href="index.html" aria-label="Họa Minh trang chủ">
+            <img class="brand-logo" src="assets/images/logo.png" alt="Họa Minh" />
+          </a>
+
+          <div class="header-actions">
+            <a class="icon-link" href="pages/login.html" aria-label="Đăng nhập">
+              <i class="fa-regular fa-circle-user" aria-hidden="true"></i>
+            </a>
+            <a class="icon-link" href="pages/cart.html" aria-label="Giỏ hàng">
+              <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+            </a>
+            <form class="search-form" action="pages/product.html">
+              <input type="search" name="q" placeholder="Tìm kiếm..." aria-label="Tìm kiếm" />
+              <button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+            </form>
+          </div>
+        </div>
+
+        <nav class="site-nav" data-site-nav>
+          <div class="nav-inner">
+            <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Mở menu">
+              <span class="hamburger" aria-hidden="true"></span>
+            </button>
+            <div class="nav-links">
+              <div class="nav-links-inner">
+                <a class="nav-link is-active" href="index.html">Trang chủ</a>
+                <a class="nav-link" href="pages/product.html">Sản phẩm</a>
+                <a class="nav-link" href="pages/information.html">Thông tin</a>
+                <a class="nav-link" href="pages/cart.html">Giỏ hàng</a>
+                <a class="nav-link" href="pages/checkout.html">Thanh toán</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <section class="home-hero">
+          <div class="container hero-inner">
+            <div class="hero-copy reveal">
+              <h1>Họa Minh - Tranh cắt giấy 3D</h1>
+              <p>"Nghệ thuật nổi lên từ từng lớp giấy."</p>
+            </div>
+
+            <div class="intro-block reveal">
+              <button class="video-card" type="button" aria-label="Phát video giới thiệu">
+                <span class="play-button" aria-hidden="true"></span>
+              </button>
+              <article class="about-panel">
+                <h2>Về Họa Minh...</h2>
+                <p>
+                  Những khung tranh cắt giấy được xếp lớp, phối sáng và hoàn thiện thủ công để
+                  biến một câu chuyện nhỏ thành món quà có chiều sâu.
+                </p>
+                <a class="btn is-light about-link" href="pages/information.html">Xem thêm</a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="featured-section">
+          <div class="container">
+            <h2 class="section-title is-cream reveal">Sản phẩm nổi bật</h2>
+            <div class="featured-grid">
+              <article class="featured-card reveal">
+                <img src="assets/images/products/image 29.png" alt="Tranh đêm trăng vàng" />
+                <a href="pages/product-detail.html" class="featured-info">Thêm thông tin <span>→</span></a>
+              </article>
+              <article class="featured-card is-main reveal">
+                <img src="assets/images/products/image 18.png" alt="Tranh mèo trong hộp đèn" />
+                <a href="pages/product-detail.html" class="featured-info">Thêm thông tin <span>→</span></a>
+              </article>
+              <article class="featured-card reveal">
+                <img src="assets/images/products/image 30.png" alt="Tranh cắt giấy ánh đèn cam" />
+                <a href="pages/product-detail.html" class="featured-info">Thêm thông tin <span>→</span></a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="discover-section">
+          <div class="container">
+            <div class="section-heading-row">
+              <h2 class="section-title is-cream reveal">Khám phá sản phẩm</h2>
+            </div>
+
+            <div class="discover-slider reveal" data-slider>
+              <div class="discover-track">
+                <a href="pages/product-detail.html"><img src="assets/images/products/image 26.png" alt="Tranh Alice nhiều lớp" /></a>
+                <a href="pages/product-detail.html"><img src="assets/images/products/image 27.png" alt="Tranh nấm fantasy" /></a>
+                <a href="pages/product-detail.html"><img src="assets/images/products/image 28.png" alt="Tranh tiệc trà" /></a>
+                <a href="pages/product-detail.html"><img src="assets/images/products/image 24.png" alt="Tranh lâu đài Halloween" /></a>
+              </div>
+              <div class="slider-controls">
+                <span class="slider-dot is-active"></span>
+                <span class="slider-dot"></span>
+                <span class="slider-dot"></span>
+                <button type="button" data-slide-prev aria-label="Trượt trái">
+                  <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <button type="button" data-slide-next aria-label="Trượt phải">
+                  <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="review-section">
+          <div class="container review-inner">
+            <h2 class="review-statement reveal">Đèn LED của chúng tôi, Khoảnh khắc của bạn — Xem đánh giá khách hàng.</h2>
+            <div class="review-cards reveal">
+              <article class="review-card">
+                <div class="avatar"></div>
+                <strong>Jessie Wilde</strong>
+                <span>5★</span>
+                <h3>Great experience</h3>
+                <p>Đơn hàng đến đúng hẹn, ánh sáng đẹp và khung tranh chắc chắn.</p>
+              </article>
+              <article class="review-card is-offset">
+                <div class="avatar"></div>
+                <strong>Emma D</strong>
+                <span>5★</span>
+                <h3>Beautiful bouquet</h3>
+                <p>Món quà nhìn ấm, tinh tế và rất hợp để trang trí phòng ngủ.</p>
+              </article>
+              <article class="review-card">
+                <div class="avatar"></div>
+                <strong>Chris Hutchison</strong>
+                <span>5★</span>
+                <h3>Wonderful flowers for my wedding</h3>
+                <p>Tôi thích cách các lớp giấy tạo chiều sâu khi bật đèn.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section">
+          <div class="container">
+            <h2 class="faq-title reveal">Câu hỏi thường gặp</h2>
+            <div class="faq-list reveal">
+              <article class="faq-item is-open">
+                <button type="button" class="faq-question">
+                  <span>01</span>
+                  <strong>Cách để tôi đặt tranh cắt giấy 3D?</strong>
+                  <i>+</i>
+                </button>
+                <div class="faq-answer">
+                  <p>Chọn mẫu tranh, kích thước, tùy chọn cá nhân hóa rồi thêm vào giỏ hàng. Các thông tin chi tiết sẽ được backend bổ sung sau.</p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button type="button" class="faq-question">
+                  <span>02</span>
+                  <strong>Giá tranh theo từng mẫu mã</strong>
+                  <i>+</i>
+                </button>
+                <div class="faq-answer">
+                  <p>Giá tạm thời đang hiển thị theo mockup. Khi có dữ liệu backend, phần này sẽ được đồng bộ lại.</p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button type="button" class="faq-question">
+                  <span>03</span>
+                  <strong>Tôi nên tặng loại tranh nào cho người thân?</strong>
+                  <i>+</i>
+                </button>
+                <div class="faq-answer">
+                  <p>Các mẫu có ánh đèn vàng ấm phù hợp làm quà kỷ niệm, sinh nhật hoặc decor phòng.</p>
+                </div>
+              </article>
+            </div>
+            <div class="faq-action reveal">
+              <a class="btn is-light" href="pages/information.html">Xem thêm</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <img class="brand-logo" src="assets/images/logo.png" alt="Họa Minh" />
+            <div class="social-row">
+              <a class="social-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+              <a class="social-link" href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
+              <a class="social-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Về chúng tôi</h3>
+            <div class="footer-list">
+              <a href="index.html">Trang chủ</a>
+              <a href="pages/product.html">Sản phẩm</a>
+              <a href="pages/information.html">Thông tin</a>
+              <a href="pages/cart.html">Giỏ hàng</a>
+              <a href="pages/checkout.html">Thanh toán</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Cơ hội</h3>
+            <div class="footer-list">
+              <a href="#">Jobs</a>
+              <a href="#">Affiliates</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Liên hệ</h3>
+            <div class="footer-list">
+              <a href="#">Facebook</a>
+              <a href="#">Instagram</a>
+              <a href="#">Tiktok</a>
+              <a href="#">Twitter</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>©2026 Moc Co.</span>
+          <div class="footer-policies">
+            <a href="#">Chính sách và quyền riêng tư</a>
+            <a href="#">Điều khoản sử dụng</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

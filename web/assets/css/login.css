@@ -1,0 +1,131 @@
+.auth-page + .site-footer {
+  display: none;
+}
+
+.header-top {
+  min-height: 86px;
+}
+
+.nav-inner {
+  min-height: 62px;
+}
+
+.auth-page {
+  min-height: calc(100dvh - 148px);
+  display: grid;
+}
+
+.auth-section {
+  min-height: calc(100dvh - 148px);
+  display: grid;
+  align-items: center;
+  padding: clamp(24px, 4vh, 42px) 0;
+}
+
+.auth-section .section-title {
+  text-align: center;
+  font-size: clamp(34px, 4.6vw, 58px);
+}
+
+.auth-card {
+  width: min(980px, 100%);
+  margin: clamp(22px, 3vh, 34px) auto 0;
+  padding: clamp(28px, 4vw, 46px);
+  display: grid;
+  gap: clamp(18px, 2.2vh, 26px);
+  border-radius: 46px;
+  background: var(--cream);
+  color: #211a17;
+}
+
+.auth-card input {
+  width: 100%;
+  min-height: clamp(58px, 7vh, 70px);
+  border: 0;
+  outline: 0;
+  border-radius: 999px;
+  background: var(--paper);
+  padding: 0 44px;
+  color: #201412;
+  font-size: clamp(18px, 1.9vw, 24px);
+  font-style: italic;
+}
+
+.password-field {
+  position: relative;
+  display: block;
+}
+
+.password-field button {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  color: #111;
+  font-size: 30px;
+  transform: translateY(-50%);
+}
+
+.password-field button i {
+  pointer-events: none;
+}
+
+.forgot-link {
+  justify-self: end;
+  margin-top: -8px;
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: #201412;
+}
+
+.auth-submit {
+  justify-self: center;
+  min-width: 210px;
+  min-height: 44px;
+  background: #5e2012;
+  font-size: 20px;
+}
+
+.auth-switch {
+  margin-top: clamp(22px, 3vh, 32px);
+  color: var(--gold);
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 900;
+  text-align: center;
+}
+
+.auth-switch a {
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .auth-page,
+  .auth-section {
+    min-height: auto;
+  }
+
+  .auth-section {
+    padding: 36px 0 54px;
+  }
+
+  .auth-card {
+    padding: 34px 18px;
+    border-radius: 34px;
+    gap: 24px;
+  }
+
+  .auth-card input {
+    min-height: 68px;
+    padding-inline: 24px 76px;
+  }
+
+  .forgot-link {
+    justify-self: center;
+    margin-top: 0;
+  }
+
+  .auth-submit {
+    width: 100%;
+  }
+}

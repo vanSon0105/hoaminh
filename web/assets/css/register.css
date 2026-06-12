@@ -1,0 +1,143 @@
+.register-page + .site-footer {
+  display: none;
+}
+
+.header-top {
+  min-height: 86px;
+}
+
+.nav-inner {
+  min-height: 62px;
+}
+
+.register-page {
+  min-height: calc(100dvh - 148px);
+  display: grid;
+}
+
+.register-section {
+  min-height: calc(100dvh - 148px);
+  display: grid;
+  align-items: center;
+  padding: clamp(18px, 3vh, 32px) 0;
+}
+
+.register-section .section-title {
+  text-align: center;
+  font-size: clamp(32px, 4.3vw, 54px);
+}
+
+.register-card {
+  width: min(980px, 100%);
+  margin: clamp(18px, 2.4vh, 28px) auto 0;
+  padding: clamp(24px, 3vw, 36px);
+  display: grid;
+  gap: clamp(12px, 1.65vh, 18px);
+  border-radius: 42px;
+  background: var(--cream);
+  color: #211a17;
+}
+
+.register-card input,
+.social-auth button {
+  width: 100%;
+  min-height: clamp(48px, 5.6vh, 60px);
+  border: 0;
+  outline: 0;
+  border-radius: 999px;
+  background: var(--paper);
+  padding: 0 36px;
+  color: #201412;
+  font-size: clamp(16px, 1.55vw, 21px);
+  font-style: italic;
+}
+
+.password-field {
+  position: relative;
+  display: block;
+}
+
+.password-field button {
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  color: #111;
+  font-size: 28px;
+  transform: translateY(-50%);
+}
+
+.password-field button i {
+  pointer-events: none;
+}
+
+.auth-separator {
+  margin: 6px 0 0;
+  text-align: center;
+  color: #2b211c;
+  font-size: clamp(18px, 2vw, 24px);
+  text-transform: uppercase;
+}
+
+.social-auth {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.social-auth button {
+  font-style: normal;
+  font-weight: 900;
+}
+
+.register-submit {
+  justify-self: center;
+  min-width: 190px;
+  min-height: 42px;
+  margin-top: 8px;
+  font-size: 19px;
+}
+
+.auth-switch {
+  margin-top: clamp(18px, 2.5vh, 28px);
+  color: var(--gold);
+  font-size: clamp(20px, 2.3vw, 30px);
+  font-weight: 900;
+  text-align: center;
+}
+
+.auth-switch a {
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .register-page,
+  .register-section {
+    min-height: auto;
+  }
+
+  .register-section {
+    padding: 34px 0 54px;
+  }
+
+  .register-card {
+    padding: 34px 18px;
+    border-radius: 34px;
+    gap: 22px;
+  }
+
+  .social-auth {
+    grid-template-columns: 1fr;
+  }
+
+  .register-card input,
+  .social-auth button {
+    min-height: 66px;
+  }
+
+  .register-submit {
+    width: 100%;
+  }
+}

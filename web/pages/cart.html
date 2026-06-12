@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng - Họa Minh</title>
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/cart.css" />
+    <script src="../assets/js/cart.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-top">
+          <a class="brand-link" href="../index.html"><img class="brand-logo" src="../assets/images/logo.png" alt="Họa Minh" /></a>
+          <div class="header-actions">
+            <a class="icon-link" href="login.html" aria-label="Đăng nhập"><i class="fa-regular fa-circle-user" aria-hidden="true"></i></a>
+            <a class="icon-link" href="cart.html" aria-label="Giỏ hàng"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></a>
+            <form class="search-form" action="product.html"><input type="search" name="q" placeholder="Tìm kiếm..." /><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button></form>
+          </div>
+        </div>
+        <nav class="site-nav" data-site-nav>
+          <div class="nav-inner">
+            <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Mở menu"><span class="hamburger" aria-hidden="true"></span></button>
+            <div class="nav-links"><div class="nav-links-inner"><a class="nav-link" href="../index.html">Trang chủ</a><a class="nav-link" href="product.html">Sản phẩm</a><a class="nav-link" href="information.html">Thông tin</a><a class="nav-link is-active" href="cart.html">Giỏ hàng</a><a class="nav-link" href="checkout.html">Thanh toán</a></div></div>
+          </div>
+        </nav>
+      </header>
+
+      <main class="cart-page">
+        <section class="cart-products">
+          <div class="container">
+            <div class="cart-heading reveal">
+              <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+              <h1 class="section-title">Giỏ hàng của bạn</h1>
+            </div>
+
+            <div class="cart-grid reveal">
+              <article class="cart-item" data-cart-item>
+                <div class="cart-item-image"><img src="../assets/images/products/image 27.png" alt="Sugar Rush" /><button type="button" data-remove aria-label="Xóa sản phẩm">×</button></div>
+                <div class="cart-meta"><h2>Sugar Rush</h2><strong>499k</strong><a class="btn" href="product-detail.html">Xem thêm <span class="btn-arrow">→</span></a></div>
+              </article>
+              <article class="cart-item" data-cart-item>
+                <div class="cart-item-image"><img src="../assets/images/products/image 28.png" alt="Stay Cool" /></div>
+                <div class="cart-meta"><h2>Stay Cool</h2><strong>499k</strong><a class="btn" href="product-detail.html">Xem thêm <span class="btn-arrow">→</span></a></div>
+              </article>
+              <article class="cart-item" data-cart-item>
+                <div class="cart-item-image"><img src="../assets/images/products/image 24.png" alt="Buttercream" /></div>
+                <div class="cart-meta"><h2>Buttercream</h2><strong>499k</strong><a class="btn" href="product-detail.html">Xem thêm <span class="btn-arrow">→</span></a></div>
+              </article>
+              <article class="cart-item" data-cart-item>
+                <div class="cart-item-image"><img src="../assets/images/products/image 27.png" alt="Buttercream" /></div>
+                <div class="cart-meta"><h2>Buttercream</h2><strong>499k</strong><a class="btn" href="product-detail.html">Xem thêm <span class="btn-arrow">→</span></a></div>
+              </article>
+              <article class="cart-item" data-cart-item>
+                <div class="cart-item-image"><img src="../assets/images/products/image 26.png" alt="Buttercream" /></div>
+                <div class="cart-meta"><h2>Buttercream</h2><strong>499k</strong><a class="btn" href="product-detail.html">Xem thêm <span class="btn-arrow">→</span></a></div>
+              </article>
+              <article class="cart-item" data-cart-item>
+                <div class="cart-item-image"><img src="../assets/images/products/image 27.png" alt="Buttercream" /></div>
+                <div class="cart-meta"><h2>Buttercream</h2><strong>499k</strong><a class="btn" href="product-detail.html">Xem thêm <span class="btn-arrow">→</span></a></div>
+              </article>
+            </div>
+
+            <div class="cart-bottom reveal">
+              <a class="btn" href="checkout.html">Tiếp tục thanh toán <span class="btn-arrow">→</span></a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand"><img class="brand-logo" src="../assets/images/logo.png" alt="Họa Minh" /><div class="social-row"><a class="social-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a><a class="social-link" href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a><a class="social-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></div></div>
+          <div><h3 class="footer-title">Về chúng tôi</h3><div class="footer-list"><a href="../index.html">Trang chủ</a><a href="product.html">Sản phẩm</a><a href="information.html">Thông tin</a><a href="cart.html">Giỏ hàng</a><a href="checkout.html">Thanh toán</a></div></div>
+          <div><h3 class="footer-title">Cơ hội</h3><div class="footer-list"><a href="#">Jobs</a><a href="#">Affiliates</a></div></div>
+          <div><h3 class="footer-title">Liên hệ</h3><div class="footer-list"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">Tiktok</a><a href="#">Twitter</a></div></div>
+        </div>
+        <div class="footer-bottom"><span>©2026 Moc Co.</span><div class="footer-policies"><a href="#">Chính sách và quyền riêng tư</a><a href="#">Điều khoản sử dụng</a></div></div>
+      </footer>
+    </div>
+    <div class="toast" data-toast></div>
+  </body>
+</html>

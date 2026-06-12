@@ -1,0 +1,89 @@
+.success-hero {
+  padding: clamp(120px, 14vw, 220px) 0 70px;
+}
+
+.success-copy {
+  text-align: center;
+}
+
+.success-copy h1 {
+  color: var(--gold);
+  font-size: clamp(36px, 5vw, 76px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.check-mark {
+  width: 104px;
+  height: 104px;
+  display: grid;
+  place-items: center;
+  margin: 48px auto 46px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 78px;
+  font-weight: 900;
+}
+
+.success-copy p {
+  max-width: 1020px;
+  margin-inline: auto;
+  color: var(--gold);
+  font-size: clamp(24px, 3vw, 44px);
+  font-weight: 900;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.success-actions {
+  display: grid;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 50px;
+}
+
+.success-actions .btn {
+  min-width: 280px;
+}
+
+.recommend-block {
+  margin-top: 120px;
+}
+
+.recommend-block h2 {
+  margin-bottom: 70px;
+  color: var(--gold);
+  font-size: clamp(28px, 3vw, 44px);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.recommend-heart {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: 18px;
+}
+
+@media (max-width: 820px) {
+  .recommend-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 540px) {
+  .success-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng nhập - Họa Minh</title>
+    <title>Đăng ký - Họa Minh</title>
     <link rel="stylesheet" href="../assets/css/reset.css" />
     <link rel="stylesheet" href="../assets/css/base.css" />
-    <link rel="stylesheet" href="../assets/css/login.css" />
-    <script src="../assets/js/login.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/register.css" />
+    <script src="../assets/js/register.js" defer></script>
   </head>
   <body>
     <div class="site-shell">
@@ -19,20 +19,21 @@
         <nav class="site-nav" data-site-nav><div class="nav-inner"><button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Mở menu"><span class="hamburger"></span></button><div class="nav-links"><div class="nav-links-inner"><a class="nav-link" href="../index.html">Trang chủ</a><a class="nav-link" href="product.html">Sản phẩm</a><a class="nav-link" href="information.html">Thông tin</a><a class="nav-link" href="cart.html">Giỏ hàng</a><a class="nav-link" href="checkout.html">Thanh toán</a></div></div></div></nav>
       </header>
 
-      <main class="auth-page">
-        <section class="auth-section">
+      <main class="register-page">
+        <section class="register-section">
           <div class="container">
-            <h1 class="section-title reveal">Đăng nhập</h1>
-            <form class="auth-card reveal" data-auth-form>
-              <input type="text" placeholder="Tên đăng nhập hoặc địa chỉ email" />
-              <label class="password-field">
-                <input type="password" placeholder="Mật khẩu" data-password />
-                <button type="button" data-toggle-password aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
-              </label>
-              <a class="forgot-link" href="#">Quên mật khẩu?</a>
-              <button class="btn auth-submit" type="submit">Đăng nhập</button>
+            <h1 class="section-title reveal">Đăng ký</h1>
+            <form class="register-card reveal" data-register-form>
+              <input type="text" placeholder="Tên đăng nhập" />
+              <input type="email" placeholder="Gmail" />
+              <input type="tel" placeholder="Số điện thoại" />
+              <label class="password-field"><input type="password" placeholder="Mật khẩu" data-password /><button type="button" data-toggle-password aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></label>
+              <label class="password-field"><input type="password" placeholder="Nhập lại mật khẩu" data-password /><button type="button" data-toggle-password aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></label>
+              <div class="auth-separator">Hoặc</div>
+              <div class="social-auth"><button type="button">Facebook</button><button type="button">Google</button></div>
+              <button class="btn register-submit" type="submit">Đăng ký</button>
             </form>
-            <p class="auth-switch reveal">Bạn chưa có tài khoản? <a href="register.html">Đăng ký</a></p>
+            <p class="auth-switch reveal">Bạn chưa có tài khoản? <a href="login.html">Đăng nhập</a></p>
           </div>
         </section>
       </main>

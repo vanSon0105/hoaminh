@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản phẩm - Họa Minh</title>
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/product.css" />
+    <script src="../assets/js/product.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-top">
+          <a class="brand-link" href="../index.html" aria-label="Họa Minh trang chủ">
+            <img class="brand-logo" src="../assets/images/logo.png" alt="Họa Minh" />
+          </a>
+          <div class="header-actions">
+            <a class="icon-link" href="login.html" aria-label="Đăng nhập"><i class="fa-regular fa-circle-user" aria-hidden="true"></i></a>
+            <a class="icon-link" href="cart.html" aria-label="Giỏ hàng"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></a>
+            <form class="search-form" action="product.html">
+              <input type="search" name="q" placeholder="Tìm kiếm..." aria-label="Tìm kiếm" />
+              <button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+            </form>
+          </div>
+        </div>
+        <nav class="site-nav" data-site-nav>
+          <div class="nav-inner">
+            <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Mở menu"><span class="hamburger" aria-hidden="true"></span></button>
+            <div class="nav-links">
+              <div class="nav-links-inner">
+                <a class="nav-link" href="../index.html">Trang chủ</a>
+                <a class="nav-link is-active" href="product.html">Sản phẩm</a>
+                <a class="nav-link" href="information.html">Thông tin</a>
+                <a class="nav-link" href="cart.html">Giỏ hàng</a>
+                <a class="nav-link" href="checkout.html">Thanh toán</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main class="product-page">
+        <section class="trend-section">
+          <div class="container">
+            <h1 class="section-title reveal">Top sản phẩm xu hướng</h1>
+            <div class="trend-grid reveal">
+              <article>
+                <div class="trend-thumb placeholder"></div>
+                <time>November 19, 2021</time>
+                <h2>Tips & Tricks for Storing Bouquets</h2>
+              </article>
+              <article>
+                <div class="trend-thumb placeholder"></div>
+                <time>November 19, 2021</time>
+                <h2>Tips & Tricks for Storing Bouquets</h2>
+              </article>
+              <article>
+                <div class="trend-thumb placeholder"></div>
+                <time>November 19, 2021</time>
+                <h2>Tips & Tricks for Storing Bouquets</h2>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="filter-section">
+          <div class="container">
+            <div class="filter-title reveal">
+              <span class="filter-symbol" aria-hidden="true"></span>
+              <h2>Bộ lọc</h2>
+            </div>
+            <div class="filter-grid reveal" data-filter-panel>
+              <div class="filter-group">
+                <span class="filter-number">01</span>
+                <div>
+                  <button class="filter-heading" type="button">Kích thước <span>⌄</span></button>
+                  <button class="filter-pill" data-filter="size" data-value="20x20" type="button">20×20</button>
+                  <button class="filter-pill is-active" data-filter="size" data-value="35x35" type="button">35×35</button>
+                </div>
+              </div>
+              <div class="filter-group">
+                <span class="filter-number">02</span>
+                <div>
+                  <button class="filter-heading" type="button">Giá thành <span>⌄</span></button>
+                  <button class="filter-pill" data-filter="price" data-value="350-420" type="button">350k - 420k</button>
+                  <button class="filter-pill" data-filter="price" data-value="420-700" type="button">420k - 700k</button>
+                </div>
+              </div>
+              <div class="filter-group">
+                <span class="filter-number">03</span>
+                <div>
+                  <button class="filter-heading" type="button">Cá nhân hóa <span>⌄</span></button>
+                  <button class="filter-pill is-active" data-filter="custom" data-value="yes" type="button">Có</button>
+                  <button class="filter-pill" data-filter="custom" data-value="no" type="button">Không</button>
+                </div>
+              </div>
+              <div class="filter-group">
+                <span class="filter-number">04</span>
+                <div>
+                  <button class="filter-heading" type="button">Đồng hồ <span>⌄</span></button>
+                  <button class="filter-pill" data-filter="clock" data-value="yes" type="button">Có</button>
+                  <button class="filter-pill" data-filter="clock" data-value="no" type="button">Không</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="all-products">
+          <div class="container">
+            <div class="product-grid reveal">
+              <article class="product-card" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 8.png" alt="Tranh đèn Stay Cool" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 9.png" alt="Tranh đèn lâu đài" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 17.png" alt="Tranh đèn cô gái" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/1.png" alt="Tranh đèn cầu trăng" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 12.png" alt="Tranh đèn Venice" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 16.png" alt="Tranh phố vàng" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card is-extra" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 15.png" alt="Tranh rừng tím" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card is-extra" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 11.png" alt="Tranh hươu trong rừng" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+              <article class="product-card is-extra" data-product>
+                <div class="product-actions"><button class="card-icon-button" type="button" data-favorite aria-label="Yêu thích"><i class="fa-regular fa-heart" aria-hidden="true"></i></button></div>
+                <a class="product-media" href="product-detail.html"><img src="../assets/images/products/image 30.png" alt="Tranh vòng cây ánh cam" /></a>
+                <div class="product-panel">
+                  <div class="product-row"><h2 class="product-title">Stay Cool</h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                  <div class="product-row product-bottom"><p class="product-price">420.000<small>VND</small></p><a class="btn product-link" href="product-detail.html">Xem thêm <span>→</span></a></div>
+                </div>
+              </article>
+            </div>
+            <div class="load-more-wrap reveal">
+              <button class="load-more" type="button" data-load-more aria-label="Xem thêm sản phẩm">+</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <img class="brand-logo" src="../assets/images/logo.png" alt="Họa Minh" />
+            <div class="social-row">
+              <a class="social-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+              <a class="social-link" href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
+              <a class="social-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Về chúng tôi</h3>
+            <div class="footer-list">
+              <a href="../index.html">Trang chủ</a>
+              <a href="product.html">Sản phẩm</a>
+              <a href="information.html">Thông tin</a>
+              <a href="cart.html">Giỏ hàng</a>
+              <a href="checkout.html">Thanh toán</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Cơ hội</h3>
+            <div class="footer-list"><a href="#">Jobs</a><a href="#">Affiliates</a></div>
+          </div>
+          <div>
+            <h3 class="footer-title">Liên hệ</h3>
+            <div class="footer-list"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">Tiktok</a><a href="#">Twitter</a></div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>©2026 Moc Co.</span>
+          <div class="footer-policies"><a href="#">Chính sách và quyền riêng tư</a><a href="#">Điều khoản sử dụng</a></div>
+        </div>
+      </footer>
+    </div>
+    <div class="toast" data-toast></div>
+  </body>
+</html>
