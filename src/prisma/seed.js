@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const main = async () => {
-  const category = await prisma.category.upsert({
+  await prisma.category.upsert({
     where: { slug: "tranh-cat-giay-3d" },
     update: {},
     create: {
@@ -12,35 +12,7 @@ const main = async () => {
     }
   });
 
-  await prisma.product.upsert({
-    where: { slug: "stay-cool" },
-    update: {},
-    create: {
-      name: "Stay Cool",
-      slug: "stay-cool",
-      description: "San pham mau dung cho UI demo.",
-      price: "420000",
-      size: "35x35",
-      imageUrl: "/assets/images/products/image 8.png",
-      isFeatured: true,
-      categoryId: category.id
-    }
-  });
-
-  await prisma.product.upsert({
-    where: { slug: "buttercream" },
-    update: {},
-    create: {
-      name: "Buttercream",
-      slug: "buttercream",
-      description: "Thong tin chi tiet se duoc cap nhat khi co backend day du.",
-      price: "350000",
-      size: "35x35",
-      imageUrl: "/assets/images/products/image 24.png",
-      isFeatured: true,
-      categoryId: category.id
-    }
-  });
+  console.log("Seed: category ready. Products left empty for later import.");
 };
 
 main()
