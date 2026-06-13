@@ -33,6 +33,19 @@ const requireText = (value, message) => {
   return value.trim();
 };
 
+const normalizePhone = (phone) => String(phone || "").replace(/[\s.-]/g, "");
+
+const requirePhone = (value) => {
+  const phone = normalizePhone(value);
+  if (!/^0\d{9}$/.test(phone)) {
+    const error = new Error("Số điện thoại phải gồm 10 số và bắt đầu bằng 0");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return phone;
+};
+
 const normalizeItems = (items = []) => {
   if (!Array.isArray(items) || !items.length) {
     const error = new Error("Giỏ hàng đang trống");
@@ -62,7 +75,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const customer = req.body.customer || {};
     const customerName = requireText(customer.name || req.body.name, "Tên khách hàng là bắt buộc");
-    const phone = requireText(customer.phone || req.body.phone, "Số điện thoại là bắt buộc");
+    const phone = requirePhone(customer.phone || req.body.phone);
     const address = requireText(customer.address || req.body.address, "Địa chỉ là bắt buộc");
     const noteParts = [];
     const customerNote = customer.note || req.body.note;
@@ -77,12 +90,31 @@ router.post(
     if (productIds.length) {
       const products = await prisma.product.findMany({
         where: { id: { in: productIds } },
-        select: { id: true }
+        select: {
+          id: true,
+          variants: {
+            where: { isActive: true },
+            orderBy: { sortOrder: "asc" },
+            select: { size: true, price: true }
+          }
+        }
       });
       const existingIds = new Set(products.map((product) => product.id));
+      const variantsByProduct = new Map(products.map((product) => [product.id, product.variants]));
       items.forEach((item) => {
         if (item.productId && !existingIds.has(item.productId)) {
           item.productId = null;
+          return;
+        }
+
+        const variants = variantsByProduct.get(item.productId) || [];
+        const variant =
+          variants.find((entry) => entry.size === item.productSize) ||
+          variants[0];
+
+        if (variant) {
+          item.productSize = variant.size;
+          item.unitPrice = Number(variant.price);
         }
       });
     }

@@ -63,6 +63,55 @@ const showToast = (message) => {
   toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
 };
 
+const normalizePhone = (phone = "") => {
+  return String(phone).replace(/[\s.-]/g, "");
+};
+
+const setFieldError = (form, fieldName, message = "") => {
+  const field = form.elements[fieldName];
+  if (!field) return;
+
+  field.setCustomValidity(message);
+  field.toggleAttribute("aria-invalid", Boolean(message));
+  field.classList.toggle("is-invalid", Boolean(message));
+};
+
+const clearValidation = (form) => {
+  ["name", "phone", "address"].forEach((fieldName) => setFieldError(form, fieldName));
+};
+
+const validateDelivery = (form, data) => {
+  clearValidation(form);
+
+  const errors = [];
+  const phone = normalizePhone(data.phone);
+
+  if (!data.name?.trim() || data.name.trim().length < 2) {
+    errors.push({ field: "name", message: "Vui lòng nhập tên khách hàng" });
+  }
+
+  if (!/^0\d{9}$/.test(phone)) {
+    errors.push({ field: "phone", message: "Số điện thoại phải gồm 10 số và bắt đầu bằng 0" });
+  }
+
+  if (!data.address?.trim() || data.address.trim().length < 8) {
+    errors.push({ field: "address", message: "Vui lòng nhập địa chỉ cụ thể hơn" });
+  }
+
+  errors.forEach((error) => setFieldError(form, error.field, error.message));
+
+  if (errors.length) {
+    const firstField = form.elements[errors[0].field];
+    showToast(errors[0].message);
+    firstField?.focus();
+    firstField?.reportValidity();
+    return false;
+  }
+
+  data.phone = phone;
+  return true;
+};
+
 const normalizeCartItems = (cart) => {
   return cart.map((item) => ({
     productId: item.productId || item.id,
@@ -110,6 +159,8 @@ const setupForm = () => {
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
+    if (!validateDelivery(form, data)) return;
+
     const payload = {
       customer: {
         name: data.name?.trim(),
@@ -151,6 +202,12 @@ const setupForm = () => {
       showToast(error.message || "Không gửi được đơn hàng");
       setSubmitting(form, false);
     }
+  });
+
+  form.addEventListener("input", (event) => {
+    const field = event.target;
+    if (!["name", "phone", "address"].includes(field.name)) return;
+    setFieldError(form, field.name);
   });
 };
 

@@ -60,6 +60,10 @@ const formatPrice = (price) => {
   return `${new Intl.NumberFormat("vi-VN").format(value)} VND`;
 };
 
+const getCartKey = (item) => {
+  return item.cartKey || `${item.id}:${item.size || "default"}`;
+};
+
 const readCart = () => {
   try {
     const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -117,22 +121,24 @@ const renderCart = () => {
       const detailHref = `product-detail.html?id=${encodeURIComponent(item.id)}`;
       const price = formatPrice(item.price);
       const quantity = Math.max(1, Number(item.quantity || 1));
+      const cartKey = getCartKey(item);
 
       return `
-        <article class="cart-item" data-cart-item="${item.id}">
+        <article class="cart-item" data-cart-item="${escapeHtml(cartKey)}">
           <div class="cart-item-image">
             <img src="${resolveAssetUrl(item.imageUrl)}" alt="${escapeHtml(item.name)}" />
-            <button type="button" data-remove="${item.id}" aria-label="Xóa sản phẩm">
+            <button type="button" data-remove="${escapeHtml(cartKey)}" aria-label="Xóa sản phẩm">
               <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
           </div>
           <div class="cart-meta">
             <h2>${escapeHtml(item.name)}</h2>
+            ${item.size ? `<p class="cart-size">Kích thước: ${escapeHtml(item.size)}</p>` : ""}
             <strong>${price}</strong>
-            <div class="cart-quantity" data-cart-quantity="${item.id}">
-              <button type="button" data-cart-minus="${item.id}" aria-label="Giảm số lượng">-</button>
+            <div class="cart-quantity" data-cart-quantity="${escapeHtml(cartKey)}">
+              <button type="button" data-cart-minus="${escapeHtml(cartKey)}" aria-label="Giảm số lượng">-</button>
               <output>${quantity}</output>
-              <button type="button" data-cart-plus="${item.id}" aria-label="Tăng số lượng">+</button>
+              <button type="button" data-cart-plus="${escapeHtml(cartKey)}" aria-label="Tăng số lượng">+</button>
             </div>
             <a class="btn" href="${detailHref}">Xem thêm <span class="btn-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></a>
           </div>
@@ -144,7 +150,7 @@ const renderCart = () => {
 
 const updateQuantity = (id, direction) => {
   const cart = readCart();
-  const item = cart.find((cartItem) => String(cartItem.id) === String(id));
+  const item = cart.find((cartItem) => getCartKey(cartItem) === String(id));
   if (!item) return;
 
   item.quantity = Math.max(1, Number(item.quantity || 1) + direction);
@@ -153,7 +159,7 @@ const updateQuantity = (id, direction) => {
 };
 
 const removeItem = (id) => {
-  const cart = readCart().filter((item) => String(item.id) !== String(id));
+  const cart = readCart().filter((item) => getCartKey(item) !== String(id));
   writeCart(cart);
   renderCart();
   showToast("Đã xóa sản phẩm khỏi giỏ hàng");

@@ -24,8 +24,9 @@ const buildOrderText = ({ order, items }) => {
   ];
 
   items.forEach((item, index) => {
+    const size = item.productSize ? ` (${item.productSize})` : "";
     lines.push(
-      `${index + 1}. ${item.productName} x${item.quantity} - ${formatCurrency(item.unitPrice)}`
+      `${index + 1}. ${item.productName}${size} x${item.quantity} - ${formatCurrency(item.unitPrice)}`
     );
   });
 
@@ -47,7 +48,7 @@ const buildOrderHtml = ({ order, items }) => {
       (item, index) => `
         <tr>
           <td>${index + 1}</td>
-          <td>${escapeHtml(item.productName)}</td>
+          <td>${escapeHtml(item.productName)}${item.productSize ? ` (${escapeHtml(item.productSize)})` : ""}</td>
           <td>${item.quantity}</td>
           <td>${formatCurrency(item.unitPrice)}</td>
         </tr>`

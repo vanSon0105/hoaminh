@@ -70,6 +70,30 @@ const formatPrice = (price) => {
   return `${new Intl.NumberFormat("vi-VN").format(value)}<small>VND</small>`;
 };
 
+const getActiveVariants = (product) => {
+  return Array.isArray(product.variants)
+    ? product.variants.filter((variant) => variant.isActive !== false)
+    : [];
+};
+
+const getDefaultVariant = (product) => {
+  const variants = getActiveVariants(product);
+  return variants[0] || { id: null, size: "", price: 0 };
+};
+
+const formatProductPrice = (product) => {
+  const variants = getActiveVariants(product);
+  if (!variants.length) return "";
+
+  const prices = variants.map((variant) => toNumber(variant.price)).filter((price) => price > 0);
+  if (!prices.length) return "";
+
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const prefix = min === max ? "" : "Từ ";
+  return `${prefix}${formatPrice(min)}`;
+};
+
 const showToast = (message) => {
   const toast = document.querySelector("[data-toast]");
   if (!toast) return;
@@ -93,18 +117,22 @@ const writeCart = (cart) => {
 };
 
 const addToCart = (product, quantity = 1) => {
+  const variant = getDefaultVariant(product);
   const cart = readCart();
-  const id = String(product.id);
-  const existing = cart.find((item) => String(item.id) === id);
+  const cartKey = `${product.id}:${variant.size || "default"}`;
+  const existing = cart.find((item) => (item.cartKey || `${item.id}:${item.size || "default"}`) === cartKey);
 
   if (existing) {
     existing.quantity += quantity;
   } else {
     cart.push({
+      cartKey,
       id: product.id,
+      variantId: variant.id,
       slug: product.slug,
       name: product.name,
-      price: toNumber(product.price),
+      size: variant.size || "",
+      price: toNumber(variant.price),
       imageUrl: product.imageUrl,
       quantity
     });
@@ -154,7 +182,7 @@ const renderProductGrid = (products) => {
   grid.innerHTML = products
     .map((product, index) => {
       const detailHref = `product-detail.html?id=${encodeURIComponent(product.id)}`;
-      const price = formatPrice(product.price);
+      const price = formatProductPrice(product);
 
       return `
         <article class="product-card${index >= 6 ? " is-extra" : ""}" data-product data-product-id="${product.id}">

@@ -34,7 +34,9 @@ router.get(
               OR: [
                 { name: { contains: q } },
                 { slug: { contains: q } },
-                { description: { contains: q } }
+                { description: { contains: q } },
+                { material: { contains: q } },
+                { origin: { contains: q } }
               ]
             }
           : {}),
@@ -45,6 +47,12 @@ router.get(
       include: {
         category: true,
         images: {
+          orderBy: {
+            sortOrder: "asc"
+          }
+        },
+        variants: {
+          where: { isActive: true },
           orderBy: {
             sortOrder: "asc"
           }
@@ -76,6 +84,12 @@ router.get(
           orderBy: {
             sortOrder: "asc"
           }
+        },
+        variants: {
+          where: { isActive: true },
+          orderBy: {
+            sortOrder: "asc"
+          }
         }
       }
     });
@@ -101,8 +115,9 @@ router.post(
         name: req.body.name,
         slug: req.body.slug,
         description: req.body.description || null,
-        price: req.body.price,
-        size: req.body.size || null,
+        material: req.body.material || null,
+        origin: req.body.origin || null,
+        note: req.body.note || null,
         imageUrl: req.body.imageUrl || null,
         isFeatured: Boolean(req.body.isFeatured),
         isActive: req.body.isActive ?? true,
@@ -127,8 +142,9 @@ router.patch(
         name: req.body.name,
         slug: req.body.slug,
         description: req.body.description,
-        price: req.body.price,
-        size: req.body.size,
+        material: req.body.material,
+        origin: req.body.origin,
+        note: req.body.note,
         imageUrl: req.body.imageUrl,
         isFeatured: req.body.isFeatured,
         isActive: req.body.isActive,

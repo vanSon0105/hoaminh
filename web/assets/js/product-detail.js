@@ -7,6 +7,7 @@ const API_BASE =
 const CART_KEY = "hoaminh-cart";
 
 let currentProduct = null;
+let selectedVariant = null;
 let toastTimer;
 
 const setupMenu = () => {
@@ -56,6 +57,17 @@ const formatPrice = (price) => {
   return `${new Intl.NumberFormat("vi-VN").format(value)} <span>VND</span>`;
 };
 
+const getActiveVariants = (product) => {
+  return Array.isArray(product.variants)
+    ? product.variants.filter((variant) => variant.isActive !== false)
+    : [];
+};
+
+const getDefaultVariant = (product) => {
+  const variants = getActiveVariants(product);
+  return variants[0] || { id: null, size: "", price: 0 };
+};
+
 const showToast = (message) => {
   const toast = document.querySelector("[data-toast]");
   if (!toast) return;
@@ -87,17 +99,22 @@ const addCurrentProductToCart = () => {
   if (!currentProduct) return;
 
   const quantity = getQuantity();
+  const variant = selectedVariant || getDefaultVariant(currentProduct);
+  const cartKey = `${currentProduct.id}:${variant.size || "default"}`;
   const cart = readCart();
-  const existing = cart.find((item) => String(item.id) === String(currentProduct.id));
+  const existing = cart.find((item) => (item.cartKey || `${item.id}:${item.size || "default"}`) === cartKey);
 
   if (existing) {
     existing.quantity += quantity;
   } else {
     cart.push({
+      cartKey,
       id: currentProduct.id,
+      variantId: variant.id,
       slug: currentProduct.slug,
       name: currentProduct.name,
-      price: toNumber(currentProduct.price),
+      size: variant.size || "",
+      price: toNumber(variant.price),
       imageUrl: currentProduct.imageUrl,
       quantity
     });
@@ -119,8 +136,37 @@ const setupQuantity = () => {
   });
 };
 
+const renderSizeOptions = (product, priceElement) => {
+  const sizeOptions = document.querySelector("[data-size-options]");
+  if (!sizeOptions) return;
+
+  const variants = getActiveVariants(product);
+  sizeOptions.hidden = variants.length <= 1;
+  sizeOptions.innerHTML = variants
+    .map(
+      (variant, index) => `
+        <button class="size-option${index === 0 ? " is-active" : ""}" type="button" data-variant-id="${variant.id}">
+          ${variant.size}
+        </button>
+      `
+    )
+    .join("");
+
+  sizeOptions.querySelectorAll("[data-variant-id]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const variant = variants.find((item) => String(item.id) === button.dataset.variantId);
+      if (!variant) return;
+      selectedVariant = variant;
+      sizeOptions.querySelectorAll(".size-option").forEach((item) => item.classList.remove("is-active"));
+      button.classList.add("is-active");
+      if (priceElement) priceElement.innerHTML = formatPrice(variant.price);
+    });
+  });
+};
+
 const renderProduct = (product) => {
   currentProduct = product;
+  selectedVariant = getDefaultVariant(product);
 
   const image = document.querySelector("[data-detail-image]");
   const name = document.querySelector("[data-detail-name]");
@@ -128,6 +174,10 @@ const renderProduct = (product) => {
   const description = document.querySelector("[data-detail-description]");
   const price = document.querySelector("[data-detail-price]");
   const infoName = document.querySelector("[data-info-name]");
+  const infoSize = document.querySelector("[data-info-size]");
+  const infoMaterial = document.querySelector("[data-info-material]");
+  const infoOrigin = document.querySelector("[data-info-origin]");
+  const infoNote = document.querySelector("[data-info-note]");
 
   if (image) {
     image.src = resolveAssetUrl(product.imageUrl);
@@ -136,8 +186,17 @@ const renderProduct = (product) => {
   if (name) name.textContent = product.name || "";
   if (short) short.textContent = "";
   if (description) description.textContent = product.description || "";
-  if (price) price.innerHTML = formatPrice(product.price);
-  if (infoName) infoName.textContent = "";
+  if (price) price.innerHTML = formatPrice(selectedVariant.price);
+  if (infoName) infoName.textContent = product.name || "";
+  if (infoSize) {
+    const variants = getActiveVariants(product);
+    infoSize.textContent = variants.map((variant) => variant.size).join(", ");
+  }
+  if (infoMaterial) infoMaterial.textContent = product.material || "";
+  if (infoOrigin) infoOrigin.textContent = product.origin || "";
+  if (infoNote) infoNote.textContent = product.note || "";
+
+  renderSizeOptions(product, price);
 };
 
 const fetchProduct = async () => {

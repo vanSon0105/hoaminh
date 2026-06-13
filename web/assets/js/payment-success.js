@@ -57,6 +57,20 @@ const formatPrice = (price) => {
   return `${new Intl.NumberFormat("vi-VN").format(value)}<small>VND</small>`;
 };
 
+const getDisplayPrice = (product) => {
+  const variants = Array.isArray(product.variants)
+    ? product.variants.filter((variant) => variant.isActive !== false)
+    : [];
+  if (!variants.length) return "";
+
+  const prices = variants.map((variant) => Number(variant.price)).filter((price) => price > 0);
+  if (!prices.length) return "";
+
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  return `${min === max ? "" : "Từ "}${formatPrice(min)}`;
+};
+
 const renderRecommendations = (products) => {
   const grid = document.querySelector("[data-recommend-grid]");
   if (!grid) return;
@@ -79,7 +93,7 @@ const renderRecommendations = (products) => {
               <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
             </div>
             <div class="product-row product-bottom">
-              <p class="product-price">${formatPrice(product.price)}</p>
+              <p class="product-price">${getDisplayPrice(product)}</p>
               <a class="btn product-link" href="${detailHref}">Xem thêm <span class="btn-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></a>
             </div>
           </div>

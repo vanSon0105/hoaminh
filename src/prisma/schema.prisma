@@ -61,8 +61,9 @@ model Product {
   name        String
   slug        String         @unique
   description String?        @db.Text
-  price       Decimal        @db.Decimal(10, 2)
-  size        String?
+  material    String?
+  origin      String?
+  note        String?        @db.Text
   imageUrl    String?
   isFeatured  Boolean        @default(false)
   isActive    Boolean        @default(true)
@@ -70,6 +71,7 @@ model Product {
   category    Category?      @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
   images      ProductImage[]
+  variants    ProductVariant[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
@@ -95,6 +97,22 @@ enum ProductImageType {
   THUMBNAIL
   GALLERY
   AR_PREVIEW
+}
+
+model ProductVariant {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size      String
+  price     Decimal  @db.Decimal(10, 2)
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, size])
+  @@index([productId])
+  @@index([isActive])
 }
 
 model Order {
