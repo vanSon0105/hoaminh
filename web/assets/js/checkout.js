@@ -1,5 +1,6 @@
 const CART_KEY = "hoaminh-cart";
 const TOKEN_KEY = "hoaminh-token";
+const LOGIN_REDIRECT_KEY = "hoaminh-login-redirect";
 
 const redirectLoggedInUser = () => {
   if (!localStorage.getItem(TOKEN_KEY)) return false;
@@ -96,9 +97,18 @@ const renderOrderList = () => {
     .join("");
 };
 
+const setupAuthRedirect = () => {
+  document.querySelectorAll(".checkout-auth a").forEach((link) => {
+    link.addEventListener("click", () => {
+      localStorage.setItem(LOGIN_REDIRECT_KEY, new URL("delivery.html", window.location.href).href);
+    });
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   if (redirectLoggedInUser()) return;
   setupMenu();
   setupReveal();
+  setupAuthRedirect();
   renderOrderList();
 });

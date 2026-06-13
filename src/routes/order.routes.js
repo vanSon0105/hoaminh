@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { optionalAuth } from "../middleware/auth.js";
+import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async-handler.js";
 import { prisma } from "../lib/prisma.js";
 import { sendOrderEmail } from "../lib/mailer.js";
@@ -76,7 +76,7 @@ const normalizeItems = (items = []) => {
 
 router.post(
   "/",
-  optionalAuth,
+  authenticate,
   asyncHandler(async (req, res) => {
     const customer = req.body.customer || {};
     const customerName = requireText(customer.name || req.body.name, "Tên khách hàng là bắt buộc");

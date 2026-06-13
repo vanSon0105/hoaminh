@@ -5,6 +5,8 @@ const API_BASE =
     : "/api";
 
 const CART_KEY = "hoaminh-cart";
+const TOKEN_KEY = "hoaminh-token";
+const LOGIN_REDIRECT_KEY = "hoaminh-login-redirect";
 
 let currentProduct = null;
 let selectedVariant = null;
@@ -77,6 +79,17 @@ const showToast = (message) => {
   toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 1800);
 };
 
+const requireLogin = () => {
+  if (localStorage.getItem(TOKEN_KEY)) return true;
+
+  localStorage.setItem(LOGIN_REDIRECT_KEY, window.location.href);
+  showToast("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+  window.setTimeout(() => {
+    window.location.href = "login.html";
+  }, 700);
+  return false;
+};
+
 const readCart = () => {
   try {
     const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -97,6 +110,7 @@ const getQuantity = () => {
 
 const addCurrentProductToCart = () => {
   if (!currentProduct) return;
+  if (!requireLogin()) return;
 
   const quantity = getQuantity();
   const variant = selectedVariant || getDefaultVariant(currentProduct);

@@ -43,6 +43,14 @@ const API_BASE =
     ? "http://localhost:4000/api"
     : "/api";
 
+const LOGIN_REDIRECT_KEY = "hoaminh-login-redirect";
+
+const getLoginRedirect = () => {
+  const redirectUrl = localStorage.getItem(LOGIN_REDIRECT_KEY);
+  localStorage.removeItem(LOGIN_REDIRECT_KEY);
+  return redirectUrl || "../index.html";
+};
+
 let toastTimer;
 
 const showToast = (toast, message) => {
@@ -93,7 +101,7 @@ const setupSubmit = () => {
       localStorage.setItem("hoaminh-account-profile", JSON.stringify(result.data.user));
       showToast(toast, "Đăng nhập thành công!");
       window.setTimeout(() => {
-        window.location.href = "../index.html";
+        window.location.href = getLoginRedirect();
       }, 500);
     } catch {
       showToast(toast, "Lỗi kết nối đến máy chủ");

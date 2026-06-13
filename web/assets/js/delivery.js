@@ -54,6 +54,14 @@ const writeJson = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
+const requireLogin = () => {
+  if (localStorage.getItem(TOKEN_KEY)) return true;
+
+  localStorage.setItem("hoaminh-login-redirect", window.location.href);
+  window.location.replace("checkout.html");
+  return false;
+};
+
 const showToast = (message) => {
   const toast = document.querySelector("[data-toast]");
   if (!toast) return;
@@ -214,6 +222,7 @@ const setupForm = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (!requireLogin()) return;
   setupMenu();
   setupReveal();
   setupForm();
