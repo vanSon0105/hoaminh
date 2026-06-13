@@ -15,6 +15,33 @@ const webDir = path.join(__dirname, "..", "web");
 
 const app = express();
 
+const getConfiguredOrigins = () => {
+  return env.corsOrigin
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+};
+
+const isDevelopmentHost = (hostname) => {
+  if (["localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]"].includes(hostname)) return true;
+  if (/^10\./.test(hostname)) return true;
+  if (/^192\.168\./.test(hostname)) return true;
+  return /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
+};
+
+const isAllowedOrigin = (origin) => {
+  const configuredOrigins = getConfiguredOrigins();
+  if (!origin || origin === "null" || configuredOrigins.includes("*")) return true;
+  if (configuredOrigins.includes(origin)) return true;
+
+  try {
+    const url = new URL(origin);
+    return env.nodeEnv === "development" && isDevelopmentHost(url.hostname);
+  } catch {
+    return false;
+  }
+};
+
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -29,7 +56,13 @@ app.use(
 );
 app.use(
   cors({
-    origin: env.corsOrigin === "*" ? true : env.corsOrigin,
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true
   })
 );

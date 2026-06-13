@@ -37,6 +37,12 @@
   text-transform: uppercase;
 }
 
+.success-copy .order-code {
+  margin-top: 22px;
+  font-size: clamp(18px, 2vw, 28px);
+  letter-spacing: 0.04em;
+}
+
 .success-actions {
   display: grid;
   justify-content: center;

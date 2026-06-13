@@ -6,6 +6,8 @@ const getSessionPath = (pageName) => {
   return isPagesRoute() ? pageName : `pages/${pageName}`;
 };
 
+const normalizeText = (value = "") => value.replace(/\s+/g, " ").trim().toLowerCase();
+
 const setupAccountLinks = () => {
   const token = localStorage.getItem(SESSION_TOKEN_KEY);
   const accountHref = getSessionPath("account.html");
@@ -20,4 +22,16 @@ const setupAccountLinks = () => {
   });
 };
 
-document.addEventListener("DOMContentLoaded", setupAccountLinks);
+const setupCheckoutLinks = () => {
+  if (!localStorage.getItem(SESSION_TOKEN_KEY)) return;
+
+  document.querySelectorAll('a[href$="checkout.html"]').forEach((link) => {
+    if (!normalizeText(link.textContent).startsWith("thanh")) return;
+    link.href = getSessionPath("delivery.html");
+  });
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupAccountLinks();
+  setupCheckoutLinks();
+});

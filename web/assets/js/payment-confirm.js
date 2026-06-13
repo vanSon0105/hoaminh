@@ -1,3 +1,5 @@
+const CART_KEY = "hoaminh-cart";
+
 const setupMenu = () => {
   const nav = document.querySelector("[data-site-nav]");
   const toggle = document.querySelector("[data-menu-toggle]");
@@ -9,6 +11,12 @@ const setupMenu = () => {
 };
 
 const setupReveal = () => {
+  const items = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) {
+    items.forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -19,7 +27,59 @@ const setupReveal = () => {
     },
     { threshold: 0.14 }
   );
-  document.querySelectorAll(".reveal").forEach((item) => observer.observe(item));
+  items.forEach((item) => observer.observe(item));
+};
+
+const escapeHtml = (value = "") => {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+};
+
+const resolveAssetUrl = (url = "") => {
+  if (!url) return "";
+  if (/^(https?:|data:|blob:)/.test(url)) return url;
+  return `../${url.replace(/^\/+/, "")}`;
+};
+
+const readCart = () => {
+  try {
+    const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    return Array.isArray(cart) ? cart : [];
+  } catch {
+    return [];
+  }
+};
+
+const renderConfirmProduct = () => {
+  const target = document.querySelector("[data-confirm-product]");
+  if (!target) return;
+
+  const item = readCart()[0];
+  if (!item) {
+    target.innerHTML = `
+      <div class="confirm-empty">
+        <h2>Chưa có sản phẩm trong giỏ hàng</h2>
+        <a class="btn" href="product.html">Chọn sản phẩm <span class="btn-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></a>
+      </div>
+    `;
+    return;
+  }
+
+  target.innerHTML = `
+    <div class="confirm-thumb">
+      <img src="${resolveAssetUrl(item.imageUrl)}" alt="${escapeHtml(item.name)}" />
+    </div>
+    <div>
+      <h2>${escapeHtml(item.name)}</h2>
+      <strong>Số lượng: ${Math.max(1, Number(item.quantity || 1))}</strong>
+      <p></p>
+      <span></span>
+    </div>
+  `;
 };
 
 const setupConfirm = () => {
@@ -34,5 +94,6 @@ const setupConfirm = () => {
 document.addEventListener("DOMContentLoaded", () => {
   setupMenu();
   setupReveal();
+  renderConfirmProduct();
   setupConfirm();
 });

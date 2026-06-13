@@ -16,8 +16,18 @@
 }
 
 .confirm-thumb {
+  overflow: hidden;
   width: 250px;
   height: 250px;
+  border-radius: 18px;
+  background: #050405;
+  box-shadow: 0 16px 30px rgba(242, 172, 102, 0.18);
+}
+
+.confirm-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .confirm-product h2 {
@@ -53,6 +63,26 @@
   background: #f0b773;
   color: #201412;
   font-weight: 800;
+}
+
+.confirm-product span:empty {
+  display: none;
+}
+
+.confirm-empty {
+  grid-column: 1 / -1;
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+  gap: 22px;
+  border-radius: 24px;
+  background: rgba(255, 217, 170, 0.08);
+  color: var(--paper);
+  text-align: center;
+}
+
+.confirm-empty h2 {
+  font-size: clamp(26px, 4vw, 44px);
 }
 
 .confirm-form {

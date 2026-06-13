@@ -44,22 +44,19 @@
         <section class="detail-hero">
           <div class="container detail-grid">
             <div class="detail-gallery reveal">
-              <div class="gallery-frame placeholder">
-                <button class="gallery-arrow left" type="button" aria-label="Ảnh trước">‹</button>
-                <button class="gallery-arrow right" type="button" aria-label="Ảnh sau">›</button>
+              <div class="gallery-frame" data-product-gallery>
+                <img data-detail-image alt="" />
+                <button class="gallery-arrow left" type="button" aria-label="Ảnh trước"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                <button class="gallery-arrow right" type="button" aria-label="Ảnh sau"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
               </div>
               <a class="btn ar-button" href="ar.html">AR sản phẩm</a>
             </div>
 
             <article class="detail-copy reveal">
-              <h1>Buttercream</h1>
-              <strong>A bright mixed Bouq featuring hot pink and yellow roses with pink carnations.</strong>
-              <p>
-                How sweet it is to watch these stems bloom. This festive, candy-colored arrangement
-                features pink roses and carnations, yellow roses and craspedia, and orange gerbera
-                daisies, surrounded by even more floral accents.
-              </p>
-              <p class="detail-price">350.000 <span>VND</span></p>
+              <h1 data-detail-name>Đang tải...</h1>
+              <strong data-detail-short></strong>
+              <p data-detail-description></p>
+              <p class="detail-price" data-detail-price></p>
               <div class="quantity" data-quantity>
                 <button type="button" data-minus>-</button>
                 <output>1</output>
@@ -74,7 +71,7 @@
           <div class="container">
             <h2 class="section-title reveal">Thông tin sản phẩm</h2>
             <div class="info-board reveal">
-              <div class="info-row"><span>Tên sản phẩm</span><i></i></div>
+              <div class="info-row"><span>Tên sản phẩm</span><i data-info-name></i></div>
               <div class="info-row"><span>Kích thước</span><i></i></div>
               <div class="info-row"><span>Thành phần</span><i></i></div>
               <div class="info-row"><span>Sản xuất tại</span><i></i></div>

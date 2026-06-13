@@ -43,10 +43,15 @@ router.get(
         ...(active === undefined ? {} : { isActive: active })
       },
       include: {
-        category: true
+        category: true,
+        images: {
+          orderBy: {
+            sortOrder: "asc"
+          }
+        }
       },
       orderBy: {
-        createdAt: "desc"
+        id: "asc"
       }
     });
 
@@ -66,7 +71,12 @@ router.get(
     const product = await prisma.product.findFirst({
       where: Number.isInteger(id) ? { id } : { slug: idOrSlug },
       include: {
-        category: true
+        category: true,
+        images: {
+          orderBy: {
+            sortOrder: "asc"
+          }
+        }
       }
     });
 

@@ -8,5 +8,12 @@ export const env = {
   corsOrigin: process.env.CORS_ORIGIN || "*",
   databaseUrl: process.env.DATABASE_URL || "",
   jwtSecret: process.env.JWT_SECRET || "hoaminh-jwt-secret-dev",
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d"
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  adminOrderEmail: process.env.ADMIN_ORDER_EMAIL || process.env.SMTP_USER || "admin@hoaminh.local",
+  smtpHost: process.env.SMTP_HOST || "",
+  smtpPort: Number(process.env.SMTP_PORT || 587),
+  smtpSecure: process.env.SMTP_SECURE === "true",
+  smtpUser: process.env.SMTP_USER || "",
+  smtpPass: process.env.SMTP_PASS || "",
+  smtpFrom: process.env.SMTP_FROM || process.env.SMTP_USER || "Họa Minh <no-reply@hoaminh.local>"
 };

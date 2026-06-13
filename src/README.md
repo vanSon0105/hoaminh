@@ -14,6 +14,7 @@ npm run dev
 ```
 
 Update `DATABASE_URL` in `.env` before running database commands.
+Set `ADMIN_ORDER_EMAIL` and SMTP variables when you want real order emails. Without SMTP, the API logs the email content for local demo.
 
 ## Scripts
 
@@ -35,3 +36,4 @@ Update `DATABASE_URL` in `.env` before running database commands.
 - `POST /api/products`: create product
 - `PATCH /api/products/:id`: update product
 - `DELETE /api/products/:id`: soft delete product
+- `POST /api/orders`: create order and notify admin
