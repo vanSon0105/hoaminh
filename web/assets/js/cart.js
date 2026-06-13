@@ -77,6 +77,14 @@ const writeCart = (cart) => {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 };
 
+const updateCartItem = (id, updater) => {
+  const cart = readCart();
+  const item = cart.find((cartItem) => getCartKey(cartItem) === String(id));
+  if (!item) return;
+  updater(item);
+  writeCart(cart);
+};
+
 const showToast = (message) => {
   const toast = document.querySelector("[data-toast]");
   if (!toast) return;
@@ -122,6 +130,8 @@ const renderCart = () => {
       const price = formatPrice(item.price);
       const quantity = Math.max(1, Number(item.quantity || 1));
       const cartKey = getCartKey(item);
+      const engravingEnabled = Boolean(item.engravingEnabled || item.engravingText);
+      const personalized = Boolean(item.isPersonalized);
 
       return `
         <article class="cart-item" data-cart-item="${escapeHtml(cartKey)}">
@@ -140,6 +150,17 @@ const renderCart = () => {
               <output>${quantity}</output>
               <button type="button" data-cart-plus="${escapeHtml(cartKey)}" aria-label="Tăng số lượng">+</button>
             </div>
+            <div class="cart-requests">
+              <label class="cart-check">
+                <input type="checkbox" data-engraving-toggle="${escapeHtml(cartKey)}" ${engravingEnabled ? "checked" : ""} />
+                <span>Khắc tên</span>
+              </label>
+              <input class="cart-request-input" type="text" data-engraving-text="${escapeHtml(cartKey)}" placeholder="Tên muốn khắc" value="${escapeHtml(item.engravingText || "")}" ${engravingEnabled ? "" : "disabled"} />
+              <label class="cart-check">
+                <input type="checkbox" data-personalized-toggle="${escapeHtml(cartKey)}" ${personalized ? "checked" : ""} />
+                <span>Cá nhân hóa thiết kế</span>
+              </label>
+            </div>
             <a class="btn" href="${detailHref}">Xem thêm <span class="btn-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></a>
           </div>
         </article>
@@ -149,12 +170,9 @@ const renderCart = () => {
 };
 
 const updateQuantity = (id, direction) => {
-  const cart = readCart();
-  const item = cart.find((cartItem) => getCartKey(cartItem) === String(id));
-  if (!item) return;
-
-  item.quantity = Math.max(1, Number(item.quantity || 1) + direction);
-  writeCart(cart);
+  updateCartItem(id, (item) => {
+    item.quantity = Math.max(1, Number(item.quantity || 1) + direction);
+  });
   renderCart();
 };
 
@@ -183,6 +201,36 @@ const setupCartEvents = () => {
     if (plusButton) {
       updateQuantity(plusButton.dataset.cartPlus, 1);
     }
+  });
+
+  document.addEventListener("change", (event) => {
+    const engravingToggle = event.target.closest("[data-engraving-toggle]");
+    if (engravingToggle) {
+      const id = engravingToggle.dataset.engravingToggle;
+      updateCartItem(id, (item) => {
+        item.engravingEnabled = engravingToggle.checked;
+        if (!engravingToggle.checked) item.engravingText = "";
+      });
+      renderCart();
+      return;
+    }
+
+    const personalizedToggle = event.target.closest("[data-personalized-toggle]");
+    if (personalizedToggle) {
+      updateCartItem(personalizedToggle.dataset.personalizedToggle, (item) => {
+        item.isPersonalized = personalizedToggle.checked;
+      });
+    }
+  });
+
+  document.addEventListener("input", (event) => {
+    const engravingInput = event.target.closest("[data-engraving-text]");
+    if (!engravingInput) return;
+
+    updateCartItem(engravingInput.dataset.engravingText, (item) => {
+      item.engravingEnabled = true;
+      item.engravingText = engravingInput.value.trim();
+    });
   });
 };
 

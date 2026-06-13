@@ -20,6 +20,8 @@ const productVariants = [
   { size: "30x30", price: 799000, sortOrder: 1 }
 ];
 
+const featuredImageNames = new Set(["aemeath.jpg", "dan-heng.jpg", "anaxa.jpg"]);
+
 const productFiles = fs
   .readdirSync(productsDir, { withFileTypes: true })
   .filter((entry) => entry.isFile() && imageExtensions.has(path.extname(entry.name).toLowerCase()))
@@ -62,7 +64,7 @@ const main = async () => {
       description: null,
       ...productDefaults,
       imageUrl,
-      isFeatured: index < 6,
+      isFeatured: featuredImageNames.has(fileName),
       isActive: true,
       categoryId: category.id
     };

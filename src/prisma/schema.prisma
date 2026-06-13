@@ -145,6 +145,8 @@ model OrderItem {
   product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
   productName String
   productSize String?
+  engravingText String?
+  isPersonalized Boolean @default(false)
   quantity    Int     @default(1)
   unitPrice   Decimal @db.Decimal(10, 2)
   createdAt   DateTime @default(now())

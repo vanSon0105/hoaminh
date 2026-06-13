@@ -119,7 +119,9 @@ const normalizeCartItems = (cart) => {
     name: item.name,
     size: item.size || "",
     price: Number(item.price || 0),
-    quantity: Math.max(1, Number(item.quantity || 1))
+    quantity: Math.max(1, Number(item.quantity || 1)),
+    engravingText: item.engravingEnabled ? item.engravingText || "" : "",
+    isPersonalized: Boolean(item.isPersonalized)
   }));
 };
 

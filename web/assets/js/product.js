@@ -8,6 +8,7 @@ const CART_KEY = "hoaminh-cart";
 
 let toastTimer;
 let allProducts = [];
+const TREND_PRODUCT_IDS = [1, 4, 2];
 
 const setupMenu = () => {
   const nav = document.querySelector("[data-site-nav]");
@@ -55,8 +56,7 @@ const escapeHtml = (value = "") => {
 const resolveAssetUrl = (url = "") => {
   if (!url) return "";
   if (/^(https?:|data:|blob:)/.test(url)) return url;
-  const cleanUrl = url.replace(/^\/+/, "");
-  return `../${cleanUrl}`;
+  return `../${url.replace(/^\/+/, "")}`;
 };
 
 const toNumber = (value) => {
@@ -134,7 +134,10 @@ const addToCart = (product, quantity = 1) => {
       size: variant.size || "",
       price: toNumber(variant.price),
       imageUrl: product.imageUrl,
-      quantity
+      quantity,
+      engravingEnabled: false,
+      engravingText: "",
+      isPersonalized: false
     });
   }
 
@@ -150,7 +153,12 @@ const renderTrendProducts = (products) => {
   const grid = document.querySelector("[data-trend-grid]");
   if (!grid) return;
 
-  const featured = products.filter((product) => product.isFeatured).slice(0, 3);
+  const orderedFeatured = TREND_PRODUCT_IDS
+    .map((id) => products.find((product) => Number(product.id) === id && product.isFeatured))
+    .filter(Boolean);
+  const featured = orderedFeatured.length === TREND_PRODUCT_IDS.length
+    ? orderedFeatured
+    : products.filter((product) => product.isFeatured).slice(0, 3);
   const list = featured.length ? featured : products.slice(0, 3);
 
   grid.innerHTML = list
@@ -174,7 +182,7 @@ const renderProductGrid = (products) => {
   if (!grid) return;
 
   if (!products.length) {
-    grid.innerHTML = `<p class="product-empty">Chưa có sản phẩm trong database.</p>`;
+    grid.innerHTML = `<p class="product-empty">Chưa có sản phẩm phù hợp.</p>`;
     if (loadMore) loadMore.style.display = "none";
     return;
   }
@@ -214,17 +222,9 @@ const renderProductGrid = (products) => {
   if (loadMore) {
     loadMore.style.display = products.length > 6 ? "" : "none";
   }
-};
 
-const setupFilters = () => {
-  document.querySelectorAll("[data-filter]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const group = button.dataset.filter;
-      document.querySelectorAll(`[data-filter="${group}"]`).forEach((item) => item.classList.remove("is-active"));
-      button.classList.add("is-active");
-      showToast("Bộ lọc sẽ hoạt động khi có dữ liệu sản phẩm chi tiết");
-    });
-  });
+  setupFavorites();
+  setupCartButtons();
 };
 
 const setupFavorites = () => {
@@ -279,8 +279,6 @@ const fetchProducts = async () => {
     allProducts = result.data;
     renderTrendProducts(allProducts);
     renderProductGrid(allProducts);
-    setupFavorites();
-    setupCartButtons();
   } catch {
     const grid = document.querySelector("[data-product-grid]");
     if (grid) {
@@ -293,7 +291,6 @@ const fetchProducts = async () => {
 document.addEventListener("DOMContentLoaded", () => {
   setupMenu();
   setupReveal();
-  setupFilters();
   setupLoadMore();
   fetchProducts();
 });

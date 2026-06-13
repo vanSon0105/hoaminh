@@ -25,9 +25,14 @@ const buildOrderText = ({ order, items }) => {
 
   items.forEach((item, index) => {
     const size = item.productSize ? ` (${item.productSize})` : "";
+    const requests = [
+      item.engravingText ? `Khắc tên: ${item.engravingText}` : "",
+      item.isPersonalized ? "Cá nhân hóa thiết kế: Có" : ""
+    ].filter(Boolean);
     lines.push(
       `${index + 1}. ${item.productName}${size} x${item.quantity} - ${formatCurrency(item.unitPrice)}`
     );
+    if (requests.length) lines.push(`   Yêu cầu: ${requests.join("; ")}`);
   });
 
   return lines.join("\n");
@@ -48,7 +53,19 @@ const buildOrderHtml = ({ order, items }) => {
       (item, index) => `
         <tr>
           <td>${index + 1}</td>
-          <td>${escapeHtml(item.productName)}${item.productSize ? ` (${escapeHtml(item.productSize)})` : ""}</td>
+          <td>
+            ${escapeHtml(item.productName)}${item.productSize ? ` (${escapeHtml(item.productSize)})` : ""}
+            ${
+              item.engravingText || item.isPersonalized
+                ? `<br><small>${[
+                    item.engravingText ? `Khắc tên: ${escapeHtml(item.engravingText)}` : "",
+                    item.isPersonalized ? "Cá nhân hóa thiết kế: Có" : ""
+                  ]
+                    .filter(Boolean)
+                    .join("; ")}</small>`
+                : ""
+            }
+          </td>
           <td>${item.quantity}</td>
           <td>${formatCurrency(item.unitPrice)}</td>
         </tr>`

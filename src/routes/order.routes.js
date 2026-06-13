@@ -63,6 +63,11 @@ const normalizeItems = (items = []) => {
       productId: Number.isInteger(productId) && productId > 0 ? productId : null,
       productName,
       productSize: typeof item.size === "string" && item.size.trim() ? item.size.trim() : null,
+      engravingText:
+        typeof item.engravingText === "string" && item.engravingText.trim()
+          ? item.engravingText.trim()
+          : null,
+      isPersonalized: item.isPersonalized === true || item.personalized === true,
       quantity,
       unitPrice
     };
