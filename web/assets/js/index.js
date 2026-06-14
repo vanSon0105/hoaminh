@@ -4,6 +4,10 @@ const API_BASE =
     ? "http://localhost:4000/api"
     : "/api";
 
+const DISCOVER_AUTOPLAY_MS = 3600;
+
+let discoverAutoplayTimer;
+
 const setupMenu = () => {
   const nav = document.querySelector("[data-site-nav]");
   const toggle = document.querySelector("[data-menu-toggle]");
@@ -69,14 +73,94 @@ const setupSlider = () => {
   const track = document.querySelector(".discover-track");
   const prev = document.querySelector("[data-slide-prev]");
   const next = document.querySelector("[data-slide-next]");
+  const dots = document.querySelector("[data-slider-dots]");
   if (!track || !prev || !next) return;
-  const scrollByCard = (direction) => {
+
+  window.clearInterval(discoverAutoplayTimer);
+
+  const getStep = () => {
     const card = track.querySelector("a");
-    const amount = card ? card.getBoundingClientRect().width + 24 : 260;
-    track.scrollBy({ left: amount * direction, behavior: "smooth" });
+    if (!card) return 0;
+    const styles = window.getComputedStyle(track);
+    const gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+    return card.getBoundingClientRect().width + gap;
   };
-  prev.addEventListener("click", () => scrollByCard(-1));
-  next.addEventListener("click", () => scrollByCard(1));
+
+  const getVisibleCount = () => {
+    const step = getStep();
+    return step ? Math.max(1, Math.round(track.clientWidth / step)) : 1;
+  };
+
+  const getPageCount = () => Math.max(1, Math.ceil(track.children.length / getVisibleCount()));
+
+  const getCurrentPage = () => {
+    const step = getStep();
+    const visibleCount = getVisibleCount();
+    const pageWidth = step * visibleCount;
+    return pageWidth ? Math.round(track.scrollLeft / pageWidth) : 0;
+  };
+
+  const updateControls = () => {
+    const pageCount = getPageCount();
+    const canScroll = track.scrollWidth > track.clientWidth + 2;
+    prev.disabled = !canScroll;
+    next.disabled = !canScroll;
+
+    if (dots) {
+      dots.innerHTML = Array.from({ length: pageCount }, (_, index) => `<span class="slider-dot${index === 0 ? " is-active" : ""}"></span>`).join("");
+    }
+  };
+
+  const updateDots = () => {
+    if (!dots) return;
+    const activeIndex = Math.min(getCurrentPage(), getPageCount() - 1);
+    dots.querySelectorAll(".slider-dot").forEach((dot, index) => {
+      dot.classList.toggle("is-active", index === activeIndex);
+    });
+  };
+
+  const scrollToPage = (pageIndex) => {
+    const step = getStep();
+    const visibleCount = getVisibleCount();
+    track.scrollTo({ left: step * visibleCount * pageIndex, behavior: "smooth" });
+  };
+
+  const scrollByPage = (direction) => {
+    const pageCount = getPageCount();
+    const nextPage = (getCurrentPage() + direction + pageCount) % pageCount;
+    scrollToPage(nextPage);
+    window.setTimeout(updateDots, 420);
+  };
+
+  const restartAutoplay = () => {
+    window.clearInterval(discoverAutoplayTimer);
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion || getPageCount() <= 1) return;
+    discoverAutoplayTimer = window.setInterval(() => scrollByPage(1), DISCOVER_AUTOPLAY_MS);
+  };
+
+  const handleManualSlide = (direction) => {
+    scrollByPage(direction);
+    restartAutoplay();
+  };
+
+  prev.addEventListener("click", () => handleManualSlide(-1));
+  next.addEventListener("click", () => handleManualSlide(1));
+  track.addEventListener("scroll", () => window.requestAnimationFrame(updateDots), { passive: true });
+  track.addEventListener("mouseenter", () => window.clearInterval(discoverAutoplayTimer));
+  track.addEventListener("mouseleave", restartAutoplay);
+  track.addEventListener("focusin", () => window.clearInterval(discoverAutoplayTimer));
+  track.addEventListener("focusout", restartAutoplay);
+  window.addEventListener("resize", () => {
+    updateControls();
+    scrollToPage(Math.min(getCurrentPage(), getPageCount() - 1));
+    updateDots();
+    restartAutoplay();
+  });
+
+  updateControls();
+  updateDots();
+  restartAutoplay();
 };
 
 const renderFeatured = (products) => {
@@ -103,8 +187,9 @@ const renderDiscover = (products) => {
   const track = document.querySelector("[data-discover-track]");
   if (!track) return;
 
-  track.innerHTML = products
-    .slice(0, 4)
+  const discoverProducts = products.filter((product) => product.isActive !== false && product.imageUrl);
+
+  track.innerHTML = discoverProducts
     .map((product) => {
       const detailHref = `pages/product-detail.html?id=${encodeURIComponent(product.id)}`;
       return `
@@ -114,11 +199,13 @@ const renderDiscover = (products) => {
       `;
     })
     .join("");
+
+  setupSlider();
 };
 
 const fetchProducts = async () => {
   try {
-    const response = await fetch(`${API_BASE}/products`);
+    const response = await fetch(`${API_BASE}/products?active=true`);
     const result = await response.json();
     if (!response.ok || !result.success) {
       throw new Error(result.message || "Không tải được sản phẩm");
@@ -139,6 +226,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMenu();
   setupReveal();
   setupFaq();
-  setupSlider();
   fetchProducts();
 });
