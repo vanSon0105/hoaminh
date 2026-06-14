@@ -24,6 +24,7 @@ const getConfiguredOrigins = () => {
 
 const isDevelopmentHost = (hostname) => {
   if (["localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]"].includes(hostname)) return true;
+  if (hostname.endsWith(".trycloudflare.com")) return true;
   if (/^10\./.test(hostname)) return true;
   if (/^192\.168\./.test(hostname)) return true;
   return /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);

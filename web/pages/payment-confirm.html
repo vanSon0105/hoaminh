@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>XÃ¡c nháº­n Ä‘Æ¡n hÃ ng - Há»a Minh</title>
+    <title>Xác nhận đơn hàng - Họa Minh</title>
     <link rel="stylesheet" href="../assets/css/reset.css" />
     <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/payment-confirm.css" />
@@ -13,38 +13,139 @@
   <body>
     <div class="site-shell">
       <header class="site-header">
-        <div class="header-top"><a class="brand-link" href="../index.html"><img class="brand-logo" src="../assets/images/logo.png" alt="Há»a Minh" /></a><div class="header-actions"><a class="icon-link" href="account.html" aria-label="TÃ i khoáº£n"><i class="fa-regular fa-circle-user" aria-hidden="true"></i></a><a class="icon-link" href="cart.html"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></a><form class="search-form" action="product.html"><input type="search" name="q" placeholder="TÃ¬m kiáº¿m..." /><button type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button></form></div></div>
-        <nav class="site-nav" data-site-nav><div class="nav-inner"><button class="mobile-menu-button" type="button" data-menu-toggle><span class="hamburger"></span></button><div class="nav-links"><div class="nav-links-inner"><a class="nav-link" href="../index.html">Trang chá»§</a><a class="nav-link" href="product.html">Sáº£n pháº©m</a><a class="nav-link" href="information.html">ThÃ´ng tin</a><a class="nav-link" href="cart.html">Giá» hÃ ng</a><a class="nav-link is-active" href="checkout.html">Thanh toÃ¡n</a></div></div></div></nav>
+        <div class="header-top">
+          <a class="brand-link" href="../index.html"
+            ><img
+              class="brand-logo"
+              src="../assets/images/logo.png"
+              alt="Họa Minh"
+          /></a>
+          <div class="header-actions">
+            <a class="icon-link" href="account.html" aria-label="Tài khoản"
+              ><i class="fa-regular fa-circle-user" aria-hidden="true"></i></a
+            ><a class="icon-link" href="cart.html"
+              ><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i
+            ></a>
+            <form class="search-form" action="product.html">
+              <input type="search" name="q" placeholder="Tìm kiếm..." /><button
+                type="submit"
+              >
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        <nav class="site-nav" data-site-nav>
+          <div class="nav-inner">
+            <button class="mobile-menu-button" type="button" data-menu-toggle>
+              <span class="hamburger"></span>
+            </button>
+            <div class="nav-links">
+              <div class="nav-links-inner">
+                <a class="nav-link" href="../index.html">Trang chủ</a
+                ><a class="nav-link" href="product.html">Sản phẩm</a
+                ><a class="nav-link" href="information.html">Thông tin</a
+                ><a class="nav-link" href="cart.html">Giỏ hàng</a
+                ><a class="nav-link is-active" href="checkout.html"
+                  >Thanh toán</a
+                >
+              </div>
+            </div>
+          </div>
+        </nav>
       </header>
 
       <main class="confirm-page">
         <section class="confirm-section">
           <div class="container">
-            <h1 class="section-title reveal">XÃ¡c nháº­n Ä‘Æ¡n hÃ ng</h1>
-            <article class="confirm-product reveal" data-confirm-product></article>
+            <h1 class="section-title reveal">Xác nhận đơn hàng</h1>
+            <article
+              class="confirm-product reveal"
+              data-confirm-product
+            ></article>
 
             <form class="confirm-form reveal" data-confirm-form>
-              <div class="side-labels"><span>Thiá»‡p</span><span>QR lÆ°u giá»¯ ká»‰ niá»‡m</span></div>
+              <div class="side-labels">
+                <span>Thiếp</span><span>QR lưu giữ kí niệm</span>
+              </div>
               <div class="message-fields">
-                <textarea placeholder="NgÆ°á»i gá»­i&#10;&#10;NgÆ°á»i nháº­n&#10;&#10;&#10;KÃ­ tÃªn"></textarea>
-                <textarea placeholder="Ghi chÃº"></textarea>
+                <textarea
+                  placeholder="Người gửi&#10;&#10;Người nhận&#10;&#10;&#10;Ký tên"
+                ></textarea>
+                <textarea placeholder="Ghi chú"></textarea>
               </div>
-              <input type="text" placeholder="TÃªn" />
-              <input type="tel" placeholder="Sá»‘ Ä‘iá»‡n thoáº¡i" />
-              <textarea placeholder="Äá»‹a chá»‰"></textarea>
-              <textarea placeholder="Ghi chÃº"></textarea>
+              <input type="text" placeholder="Tên" />
+              <input type="tel" placeholder="Số điện thoại" />
+              <textarea placeholder="Địa chỉ"></textarea>
+              <textarea placeholder="Ghi chú"></textarea>
               <div class="summary-box">
-                <span>Sáº£n pháº©m</span>
-                <span>PhÃ­ váº­n chuyá»ƒn</span>
-                <span>Tá»•ng giÃ¡ tiá»n</span>
+                <span>Sản phẩm</span>
+                <span>Phí vận chuyển</span>
+                <span>Tổng giá tiền</span>
               </div>
-              <div class="confirm-action"><button class="btn" type="submit">Äáº·t hÃ ng</button></div>
+              <div class="confirm-action">
+                <button class="btn" type="submit">Đặt hàng</button>
+              </div>
             </form>
           </div>
         </section>
       </main>
 
-      <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><img class="brand-logo" src="../assets/images/logo.png" alt="Há»a Minh" /><div class="social-row"><a class="social-link" href="https://www.facebook.com/share/1ESyvpu424/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a></div></div><div><h3 class="footer-title">Vá» chÃºng tÃ´i</h3><div class="footer-list"><a href="../index.html">Trang chá»§</a><a href="product.html">Sáº£n pháº©m</a><a href="information.html">ThÃ´ng tin</a><a href="cart.html">Giá» hÃ ng</a><a href="checkout.html">Thanh toÃ¡n</a></div></div><div><h3 class="footer-title">CÆ¡ há»™i</h3><div class="footer-list"><a href="#">Jobs</a><a href="#">Affiliates</a></div></div><div><h3 class="footer-title">LiÃªn há»‡</h3><div class="footer-list"><a href="https://www.facebook.com/share/1ESyvpu424/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a></div></div></div><div class="footer-bottom"><span>Â©2026 Moc Co.</span><div class="footer-policies"><a href="#">ChÃ­nh sÃ¡ch vÃ  quyá»n riÃªng tÆ°</a><a href="#">Äiá»u khoáº£n sá»­ dá»¥ng</a></div></div></footer>
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <img
+              class="brand-logo"
+              src="../assets/images/logo.png"
+              alt="Họa Minh"
+            />
+            <div class="social-row">
+              <a
+                class="social-link"
+                href="https://www.facebook.com/share/1ESyvpu424/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                ><i class="fa-brands fa-facebook-f" aria-hidden="true"></i
+              ></a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Về chúng tôi</h3>
+            <div class="footer-list">
+              <a href="../index.html">Trang chủ</a
+              ><a href="product.html">Sản phẩm</a
+              ><a href="information.html">Thông tin</a
+              ><a href="cart.html">Giỏ hàng</a
+              ><a href="checkout.html">Thanh toán</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Cơ hội</h3>
+            <div class="footer-list">
+              <a href="#">Jobs</a><a href="#">Affiliates</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-title">Liên hệ</h3>
+            <div class="footer-list">
+              <a
+                href="https://www.facebook.com/share/1ESyvpu424/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Facebook</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>Â©2026 Moc Co.</span>
+          <div class="footer-policies">
+            <a href="#">Chính sách và quyền riêng tư</a
+            ><a href="#">Điều khoản sử dụng</a>
+          </div>
+        </div>
+      </footer>
     </div>
   </body>
 </html>

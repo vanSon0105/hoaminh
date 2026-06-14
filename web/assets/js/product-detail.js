@@ -7,6 +7,7 @@ const API_BASE =
 const CART_KEY = "hoaminh-cart";
 const TOKEN_KEY = "hoaminh-token";
 const LOGIN_REDIRECT_KEY = "hoaminh-login-redirect";
+const AR_PREVIEW_TYPE = "AR_PREVIEW";
 
 let currentProduct = null;
 let selectedVariant = null;
@@ -70,6 +71,12 @@ const getDefaultVariant = (product) => {
   return variants[0] || { id: null, size: "", price: 0 };
 };
 
+const getArPreviewImage = (product) => {
+  return Array.isArray(product.images)
+    ? product.images.find((item) => item.type === AR_PREVIEW_TYPE && item.url)
+    : null;
+};
+
 const showToast = (message) => {
   const toast = document.querySelector("[data-toast]");
   if (!toast) return;
@@ -108,9 +115,9 @@ const getQuantity = () => {
   return Math.max(1, Number(output ? output.textContent : 1));
 };
 
-const addCurrentProductToCart = () => {
-  if (!currentProduct) return;
-  if (!requireLogin()) return;
+const addCurrentProductToCart = ({ showMessage = true } = {}) => {
+  if (!currentProduct) return false;
+  if (!requireLogin()) return false;
 
   const quantity = getQuantity();
   const variant = selectedVariant || getDefaultVariant(currentProduct);
@@ -135,7 +142,8 @@ const addCurrentProductToCart = () => {
   }
 
   writeCart(cart);
-  showToast("Đã thêm sản phẩm vào giỏ hàng");
+  if (showMessage) showToast("Đã thêm sản phẩm vào giỏ hàng");
+  return true;
 };
 
 const setupQuantity = () => {
@@ -192,6 +200,7 @@ const renderProduct = (product) => {
   const infoMaterial = document.querySelector("[data-info-material]");
   const infoOrigin = document.querySelector("[data-info-origin]");
   const infoNote = document.querySelector("[data-info-note]");
+  const arButton = document.querySelector("[data-ar-button]");
 
   if (image) {
     image.src = resolveAssetUrl(product.imageUrl);
@@ -209,6 +218,21 @@ const renderProduct = (product) => {
   if (infoMaterial) infoMaterial.textContent = product.material || "";
   if (infoOrigin) infoOrigin.textContent = product.origin || "";
   if (infoNote) infoNote.textContent = product.note || "";
+
+  if (arButton) {
+    const arPreview = getArPreviewImage(product);
+    if (arPreview) {
+      arButton.textContent = "AR Sản Phẩm";
+      arButton.href = `ar.html?id=${encodeURIComponent(product.id)}`;
+      arButton.classList.remove("is-disabled");
+      arButton.removeAttribute("aria-disabled");
+    } else {
+      arButton.textContent = "Sản Phẩm Không Hỗ Trợ Xem AR";
+      arButton.removeAttribute("href");
+      arButton.classList.add("is-disabled");
+      arButton.setAttribute("aria-disabled", "true");
+    }
+  }
 
   renderSizeOptions(product, price);
 };
@@ -243,10 +267,22 @@ const setupCartButton = () => {
   button.addEventListener("click", addCurrentProductToCart);
 };
 
+const setupQuickBuyButton = () => {
+  const button = document.querySelector("[data-quick-buy]");
+  if (!button) return;
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (addCurrentProductToCart({ showMessage: false })) {
+      window.location.href = button.getAttribute("href") || "checkout.html";
+    }
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   setupMenu();
   setupReveal();
   setupQuantity();
   setupCartButton();
+  setupQuickBuyButton();
   fetchProduct();
 });

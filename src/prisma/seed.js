@@ -21,6 +21,10 @@ const productVariants = [
 ];
 
 const featuredImageNames = new Set(["aemeath.jpg", "dan-heng.jpg", "anaxa.jpg"]);
+const arQrByProductFile = new Map([
+  ["dan-heng.jpg", "assets/images/qr-ar/dan-heng.png"],
+  ["anaxa.jpg", "assets/images/qr-ar/anaxa.png"]
+]);
 
 const productFiles = fs
   .readdirSync(productsDir, { withFileTypes: true })
@@ -91,6 +95,18 @@ const main = async () => {
         sortOrder: 0
       }
     });
+
+    const arQrUrl = arQrByProductFile.get(fileName);
+    if (arQrUrl) {
+      await prisma.productImage.create({
+        data: {
+          productId: product.id,
+          url: arQrUrl,
+          type: "AR_PREVIEW",
+          sortOrder: 1
+        }
+      });
+    }
 
     for (const variant of productVariants) {
       await prisma.productVariant.upsert({
