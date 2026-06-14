@@ -59,6 +59,12 @@ const authHeaders = () => ({
   Authorization: `Bearer ${getToken()}`
 });
 
+const resolveAssetUrl = (url = "") => {
+  if (!url) return "";
+  if (/^(https?:|data:|blob:)/.test(url)) return url;
+  return `../${url.replace(/^\/+/, "")}`;
+};
+
 const toDateInputValue = (value) => {
   if (!value) return "";
   const date = new Date(value);
@@ -96,10 +102,16 @@ const applyUser = (user) => {
   }
 
   if (avatar && merged.avatarUrl) {
-    avatar.src = merged.avatarUrl;
+    avatar.src = resolveAssetUrl(merged.avatarUrl);
     avatar.hidden = false;
     if (avatarFallback) {
       avatarFallback.hidden = true;
+    }
+  } else if (avatar) {
+    avatar.removeAttribute("src");
+    avatar.hidden = true;
+    if (avatarFallback) {
+      avatarFallback.hidden = false;
     }
   }
 
@@ -155,7 +167,7 @@ const setupAvatar = () => {
   const preview = document.querySelector("[data-avatar-preview]");
   if (!input || !preview) return;
 
-  input.addEventListener("change", () => {
+  input.addEventListener("change", async () => {
     const file = input.files && input.files[0];
     if (!file) return;
 
@@ -165,21 +177,58 @@ const setupAvatar = () => {
       return;
     }
 
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      const avatarUrl = reader.result;
-      const fallback = document.querySelector("[data-avatar-fallback]");
-      preview.src = avatarUrl;
-      preview.hidden = false;
-      if (fallback) {
-        fallback.hidden = true;
+    if (file.size > 3 * 1024 * 1024) {
+      showToast("Ảnh đại diện tối đa 3MB");
+      input.value = "";
+      return;
+    }
+
+    const token = getToken();
+    if (!token) {
+      showToast("Bạn cần đăng nhập để đổi ảnh đại diện");
+      input.value = "";
+      return;
+    }
+
+    const previousUser = currentUser;
+    const previewUrl = URL.createObjectURL(file);
+    const fallback = document.querySelector("[data-avatar-fallback]");
+    preview.src = previewUrl;
+    preview.hidden = false;
+    if (fallback) {
+      fallback.hidden = true;
+    }
+
+    try {
+      showToast("Đang tải ảnh đại diện...");
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const response = await fetch(`${API_BASE}/auth/avatar`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Không lưu được ảnh đại diện");
       }
-      const profile = { ...readLocalProfile(), ...currentUser, avatarUrl };
+
+      const profile = { ...readLocalProfile(), ...result.data.user };
       currentUser = profile;
       saveLocalProfile(profile);
-      showToast("Đã đổi ảnh đại diện tạm thời");
-    });
-    reader.readAsDataURL(file);
+      applyUser(profile);
+      showToast("Đã lưu ảnh đại diện");
+    } catch {
+      if (previousUser) {
+        applyUser(previousUser);
+      }
+      showToast("Chưa lưu được ảnh đại diện, kiểm tra backend");
+    } finally {
+      URL.revokeObjectURL(previewUrl);
+      input.value = "";
+    }
   });
 };
 

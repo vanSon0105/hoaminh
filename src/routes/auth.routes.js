@@ -1,6 +1,11 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { randomUUID } from "crypto";
+import { fileURLToPath } from "url";
 import { prisma } from "../lib/prisma.js";
 import { env } from "../config/env.js";
 import { asyncHandler } from "../middleware/async-handler.js";
@@ -9,6 +14,37 @@ import { authenticate } from "../middleware/auth.js";
 const router = Router();
 
 const roleSelect = { select: { id: true, name: true } };
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const avatarDir = path.resolve(__dirname, "../../web/assets/avatar");
+const avatarUrlPrefix = "assets/avatar";
+const avatarMimeTypes = new Map([
+  ["image/jpeg", ".jpg"],
+  ["image/png", ".png"],
+  ["image/webp", ".webp"],
+  ["image/gif", ".gif"]
+]);
+
+fs.mkdirSync(avatarDir, { recursive: true });
+
+const avatarUpload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, callback) => callback(null, avatarDir),
+    filename: (_req, file, callback) => {
+      const extension = avatarMimeTypes.get(file.mimetype) || path.extname(file.originalname).toLowerCase() || ".jpg";
+      callback(null, `${Date.now()}-${randomUUID()}${extension}`);
+    }
+  }),
+  limits: {
+    fileSize: 3 * 1024 * 1024
+  },
+  fileFilter: (_req, file, callback) => {
+    if (avatarMimeTypes.has(file.mimetype)) {
+      callback(null, true);
+      return;
+    }
+    callback(new Error("Avatar must be an image file"));
+  }
+});
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -43,6 +79,25 @@ const parseBirthDate = (birthDate) => {
   }
 
   return parsed;
+};
+
+const handleAvatarUpload = (req, res, next) => {
+  avatarUpload.single("avatar")(req, res, (error) => {
+    if (!error) {
+      next();
+      return;
+    }
+
+    error.statusCode = error.code === "LIMIT_FILE_SIZE" ? 413 : 400;
+    next(error);
+  });
+};
+
+const removeLocalAvatar = async (avatarUrl) => {
+  if (!avatarUrl || !avatarUrl.startsWith(`${avatarUrlPrefix}/`)) return;
+
+  const fileName = path.basename(avatarUrl);
+  await fs.promises.unlink(path.join(avatarDir, fileName)).catch(() => {});
 };
 
 // ── POST /register ───────────────────────────────────────
@@ -209,6 +264,39 @@ router.patch(
       },
       include: { role: roleSelect }
     });
+
+    res.json({ success: true, data: { user: sanitizeUser(user) } });
+  })
+);
+
+// POST /avatar
+
+router.post(
+  "/avatar",
+  authenticate,
+  handleAvatarUpload,
+  asyncHandler(async (req, res) => {
+    if (!req.file) {
+      const error = new Error("Avatar image is required");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const avatarUrl = `${avatarUrlPrefix}/${req.file.filename}`;
+    const previousUser = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { avatarUrl: true }
+    });
+
+    const user = await prisma.user.update({
+      where: { id: req.user.id },
+      data: { avatarUrl },
+      include: { role: roleSelect }
+    });
+
+    if (previousUser?.avatarUrl && previousUser.avatarUrl !== avatarUrl) {
+      await removeLocalAvatar(previousUser.avatarUrl);
+    }
 
     res.json({ success: true, data: { user: sanitizeUser(user) } });
   })

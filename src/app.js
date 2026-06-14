@@ -50,7 +50,7 @@ app.use(
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         "style-src": ["'self'", "https://cdnjs.cloudflare.com"],
         "font-src": ["'self'", "https://cdnjs.cloudflare.com", "data:"],
-        "img-src": ["'self'", "data:"]
+        "img-src": ["'self'", "data:", "blob:"]
       }
     }
   })
