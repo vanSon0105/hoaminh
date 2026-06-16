@@ -15,5 +15,12 @@ export const env = {
   smtpSecure: process.env.SMTP_SECURE === "true",
   smtpUser: process.env.SMTP_USER || "",
   smtpPass: process.env.SMTP_PASS || "",
-  smtpFrom: process.env.SMTP_FROM || process.env.SMTP_USER || "Họa Minh <no-reply@hoaminh.local>"
+  smtpFrom: process.env.SMTP_FROM || process.env.SMTP_USER || "Họa Minh <no-reply@hoaminh.local>",
+  publicApiUrl: process.env.PUBLIC_API_URL || "",
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+  googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL || "",
+  facebookAppId: process.env.FACEBOOK_APP_ID || "",
+  facebookAppSecret: process.env.FACEBOOK_APP_SECRET || "",
+  facebookCallbackUrl: process.env.FACEBOOK_CALLBACK_URL || ""
 };

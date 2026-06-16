@@ -88,8 +88,22 @@
 }
 
 .social-auth button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   font-style: normal;
   font-weight: 900;
+  transition: transform 260ms var(--ease), background 260ms var(--ease);
+}
+
+.social-auth button:hover {
+  background: #fffaf0;
+  transform: translateY(-2px);
+}
+
+.social-auth i {
+  font-size: 0.9em;
 }
 
 .register-submit {

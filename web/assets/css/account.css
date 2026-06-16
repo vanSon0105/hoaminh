@@ -34,13 +34,13 @@
   text-transform: uppercase;
 }
 
-.account-heading p:not(.account-kicker) {
+/* .account-heading p:not(.account-kicker) {
   max-width: 540px;
   margin-top: 18px;
   color: var(--muted);
   font-size: clamp(17px, 1.7vw, 22px);
   line-height: 1.35;
-}
+} */
 
 .account-layout {
   display: grid;
@@ -54,9 +54,15 @@
 .account-panel {
   border-radius: 28px;
   background:
-    linear-gradient(135deg, rgba(255, 246, 222, 0.08), rgba(255, 217, 170, 0.02)),
+    linear-gradient(
+      135deg,
+      rgba(255, 246, 222, 0.08),
+      rgba(255, 217, 170, 0.02)
+    ),
     rgba(69, 47, 36, 0.62);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 24px 52px rgba(10, 4, 2, 0.22);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.12),
+    0 24px 52px rgba(10, 4, 2, 0.22);
 }
 
 .profile-card {
@@ -113,7 +119,10 @@
   gap: 10px;
   border-radius: 999px;
   font-weight: 800;
-  transition: transform 650ms var(--ease), background 650ms var(--ease), color 650ms var(--ease);
+  transition:
+    transform 650ms var(--ease),
+    background 650ms var(--ease),
+    color 650ms var(--ease);
 }
 
 .avatar-button {
@@ -210,7 +219,10 @@
   color: #211512;
   padding: 0 18px;
   font-size: clamp(17px, 1.7vw, 21px);
-  transition: border-color 500ms var(--ease), box-shadow 500ms var(--ease), transform 500ms var(--ease);
+  transition:
+    border-color 500ms var(--ease),
+    box-shadow 500ms var(--ease),
+    transform 500ms var(--ease);
 }
 
 .field-group input:focus {

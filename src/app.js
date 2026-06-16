@@ -15,6 +15,8 @@ const webDir = path.join(__dirname, "..", "web");
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 const getConfiguredOrigins = () => {
   return env.corsOrigin
     .split(",")
@@ -50,7 +52,7 @@ app.use(
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         "style-src": ["'self'", "https://cdnjs.cloudflare.com"],
         "font-src": ["'self'", "https://cdnjs.cloudflare.com", "data:"],
-        "img-src": ["'self'", "data:", "blob:"]
+        "img-src": ["'self'", "data:", "blob:", "https:"]
       }
     }
   })

@@ -100,6 +100,151 @@ const removeLocalAvatar = async (avatarUrl) => {
   await fs.promises.unlink(path.join(avatarDir, fileName)).catch(() => {});
 };
 
+const encodeSocialState = (payload) => Buffer.from(JSON.stringify(payload)).toString("base64url");
+
+const decodeSocialState = (state) => {
+  try {
+    return JSON.parse(Buffer.from(String(state || ""), "base64url").toString("utf8"));
+  } catch {
+    return {};
+  }
+};
+
+const getRequestBaseUrl = (req) => {
+  return env.publicApiUrl || `${req.protocol}://${req.get("host")}`;
+};
+
+const getSocialRedirectUrl = (req) => {
+  return typeof req.query.redirect === "string" && req.query.redirect
+    ? req.query.redirect
+    : `${getRequestBaseUrl(req)}/pages/account.html`;
+};
+
+const getSocialCallbackUrl = (req, provider) => {
+  if (provider === "google" && env.googleCallbackUrl) return env.googleCallbackUrl;
+  if (provider === "facebook" && env.facebookCallbackUrl) return env.facebookCallbackUrl;
+  return `${getRequestBaseUrl(req)}/api/auth/${provider}/callback`;
+};
+
+const redirectWithSocialError = (res, redirectUrl, message) => {
+  res.redirect(`${redirectUrl}#social_error=${encodeURIComponent(message)}`);
+};
+
+const redirectWithSocialAuth = (res, redirectUrl, user) => {
+  const token = generateToken(user);
+  const encodedUser = Buffer.from(JSON.stringify(sanitizeUser(user))).toString("base64url");
+  res.redirect(`${redirectUrl}#social_token=${encodeURIComponent(token)}&social_user=${encodeURIComponent(encodedUser)}`);
+};
+
+const getOrCreateSocialUser = async ({ email, name, avatarUrl }) => {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const error = new Error("Social account did not return a valid email");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const fallbackName = normalizedEmail.split("@")[0];
+  const existingUser = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+    include: { role: roleSelect }
+  });
+
+  if (existingUser) {
+    return prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        ...(!existingUser.name && name ? { name: name.trim() } : {}),
+        ...(!existingUser.avatarUrl && avatarUrl ? { avatarUrl } : {})
+      },
+      include: { role: roleSelect }
+    });
+  }
+
+  const passwordHash = await bcrypt.hash(randomUUID(), 10);
+  return prisma.user.create({
+    data: {
+      name: name ? name.trim() : fallbackName,
+      email: normalizedEmail,
+      avatarUrl: avatarUrl || null,
+      passwordHash
+    },
+    include: { role: roleSelect }
+  });
+};
+
+const fetchGoogleProfile = async (req, code) => {
+  const callbackUrl = getSocialCallbackUrl(req, "google");
+  const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: env.googleClientId,
+      client_secret: env.googleClientSecret,
+      code,
+      grant_type: "authorization_code",
+      redirect_uri: callbackUrl
+    })
+  });
+  const tokenData = await tokenResponse.json();
+
+  if (!tokenResponse.ok || !tokenData.access_token) {
+    throw new Error(tokenData.error_description || "Cannot connect Google account");
+  }
+
+  const profileResponse = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: { Authorization: `Bearer ${tokenData.access_token}` }
+  });
+  const profile = await profileResponse.json();
+
+  if (!profileResponse.ok || !profile.email) {
+    throw new Error("Google account did not return an email");
+  }
+
+  return {
+    email: profile.email,
+    name: profile.name,
+    avatarUrl: profile.picture
+  };
+};
+
+const fetchFacebookProfile = async (req, code) => {
+  const callbackUrl = getSocialCallbackUrl(req, "facebook");
+  const tokenUrl = new URL("https://graph.facebook.com/oauth/access_token");
+  tokenUrl.search = new URLSearchParams({
+    client_id: env.facebookAppId,
+    client_secret: env.facebookAppSecret,
+    code,
+    redirect_uri: callbackUrl
+  }).toString();
+
+  const tokenResponse = await fetch(tokenUrl);
+  const tokenData = await tokenResponse.json();
+
+  if (!tokenResponse.ok || !tokenData.access_token) {
+    throw new Error(tokenData.error?.message || "Cannot connect Facebook account");
+  }
+
+  const profileUrl = new URL("https://graph.facebook.com/me");
+  profileUrl.search = new URLSearchParams({
+    fields: "id,name,email,picture.width(400).height(400)",
+    access_token: tokenData.access_token
+  }).toString();
+
+  const profileResponse = await fetch(profileUrl);
+  const profile = await profileResponse.json();
+
+  if (!profileResponse.ok || !profile.email) {
+    throw new Error("Facebook account did not return an email");
+  }
+
+  return {
+    email: profile.email,
+    name: profile.name,
+    avatarUrl: profile.picture?.data?.url
+  };
+};
+
 // ── POST /register ───────────────────────────────────────
 
 router.post(
@@ -201,6 +346,101 @@ router.post(
       success: true,
       data: { token, user: sanitizeUser(user) }
     });
+  })
+);
+
+// GET /google
+
+router.get(
+  "/google",
+  asyncHandler(async (req, res) => {
+    const redirectUrl = getSocialRedirectUrl(req);
+    if (!env.googleClientId || !env.googleClientSecret) {
+      redirectWithSocialError(res, redirectUrl, "Chưa cấu hình đăng ký Gmail");
+      return;
+    }
+
+    const callbackUrl = getSocialCallbackUrl(req, "google");
+    const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+    authUrl.search = new URLSearchParams({
+      client_id: env.googleClientId,
+      redirect_uri: callbackUrl,
+      response_type: "code",
+      scope: "openid email profile",
+      prompt: "select_account",
+      state: encodeSocialState({ redirectUrl })
+    }).toString();
+
+    res.redirect(authUrl.toString());
+  })
+);
+
+// GET /google/callback
+
+router.get(
+  "/google/callback",
+  asyncHandler(async (req, res) => {
+    const state = decodeSocialState(req.query.state);
+    const redirectUrl = state.redirectUrl || getSocialRedirectUrl(req);
+
+    try {
+      if (typeof req.query.code !== "string") {
+        throw new Error("Google did not return an authorization code");
+      }
+
+      const profile = await fetchGoogleProfile(req, req.query.code);
+      const user = await getOrCreateSocialUser(profile);
+      redirectWithSocialAuth(res, redirectUrl, user);
+    } catch (error) {
+      redirectWithSocialError(res, redirectUrl, error.message || "Không đăng ký được bằng Gmail");
+    }
+  })
+);
+
+// GET /facebook
+
+router.get(
+  "/facebook",
+  asyncHandler(async (req, res) => {
+    const redirectUrl = getSocialRedirectUrl(req);
+    if (!env.facebookAppId || !env.facebookAppSecret) {
+      redirectWithSocialError(res, redirectUrl, "Chưa cấu hình đăng ký Facebook");
+      return;
+    }
+
+    const callbackUrl = getSocialCallbackUrl(req, "facebook");
+    const authUrl = new URL("https://www.facebook.com/dialog/oauth");
+    authUrl.search = new URLSearchParams({
+      client_id: env.facebookAppId,
+      redirect_uri: callbackUrl,
+      response_type: "code",
+      scope: "email,public_profile",
+      state: encodeSocialState({ redirectUrl })
+    }).toString();
+
+    res.redirect(authUrl.toString());
+  })
+);
+
+// GET /facebook/callback
+
+router.get(
+  "/facebook/callback",
+  asyncHandler(async (req, res) => {
+    const state = decodeSocialState(req.query.state);
+    const redirectUrl = state.redirectUrl || getSocialRedirectUrl(req);
+
+    try {
+      if (typeof req.query.code !== "string") {
+        throw new Error("Facebook did not return an authorization code");
+      }
+
+      const profile = await fetchFacebookProfile(req, req.query.code);
+      const user = await getOrCreateSocialUser(profile);
+      redirectWithSocialAuth(res, redirectUrl, user);
+    } catch (error) {
+      redirectWithSocialError(res, redirectUrl, error.message || "Không đăng ký được bằng Facebook");
+    }
   })
 );
 

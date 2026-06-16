@@ -46,6 +46,8 @@ const API_BASE =
     : "/api";
 
 const LOGIN_REDIRECT_KEY = "hoaminh-login-redirect";
+const TOKEN_KEY = "hoaminh-token";
+const PROFILE_KEY = "hoaminh-account-profile";
 
 const getLoginRedirect = () => {
   const redirectUrl = localStorage.getItem(LOGIN_REDIRECT_KEY);
@@ -60,6 +62,68 @@ const showToast = (toast, message) => {
   toast.textContent = message;
   toast.classList.add("is-visible");
   toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 1800);
+};
+
+const decodeBase64UrlJson = (value) => {
+  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+  const bytes = Uint8Array.from(atob(padded), (char) => char.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+};
+
+const clearSocialHash = () => {
+  window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
+};
+
+const setupSocialResult = () => {
+  const toast = document.querySelector("[data-toast]");
+  if (!toast || !window.location.hash) return;
+
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  const error = params.get("social_error");
+  const token = params.get("social_token");
+  const encodedUser = params.get("social_user");
+
+  if (error) {
+    clearSocialHash();
+    showToast(toast, error);
+    return;
+  }
+
+  if (!token || !encodedUser) return;
+
+  try {
+    const user = decodeBase64UrlJson(encodedUser);
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(user));
+    clearSocialHash();
+    showToast(toast, "Đăng ký thành công!");
+    window.setTimeout(() => {
+      window.location.href = getLoginRedirect();
+    }, 500);
+  } catch {
+    clearSocialHash();
+    showToast(toast, "Không xử lý được đăng ký mạng xã hội");
+  }
+};
+
+const setupSocialAuth = () => {
+  const toast = document.querySelector("[data-toast]");
+  document.querySelectorAll("[data-social-auth]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const provider = button.dataset.socialAuth;
+      if (!provider) return;
+
+      if (window.location.protocol === "file:") {
+        if (toast) showToast(toast, "Vui lòng mở bằng Live Server để đăng ký Gmail/Facebook");
+        return;
+      }
+
+      const redirectUrl = window.location.href.split("#")[0];
+      button.disabled = true;
+      window.location.href = `${API_BASE}/auth/${encodeURIComponent(provider)}?redirect=${encodeURIComponent(redirectUrl)}`;
+    });
+  });
 };
 
 const setupSubmit = () => {
@@ -143,5 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMenu();
   setupReveal();
   setupPassword();
+  setupSocialResult();
+  setupSocialAuth();
   setupSubmit();
 });
